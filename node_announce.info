@@ -1,0 +1,5 @@
+name = Node Announce
+description = Add regular announcements for node types
+core = 6.x
+dependencies[] = 'token'
+dependencies[] = 'date'
