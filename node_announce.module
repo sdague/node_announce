@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ *
+ * This module allows admins to set recurrent announcements for nodes to send
+ * to specified email addresses.
+ */
+
+/**
+ *  Implementation of hook_cron().
+ *
+ *  Go through all the announcements and set
+ */
+function node_announce_cron() {
+  node_announce_process();
+}

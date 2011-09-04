@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @file: install routines for the Node Announce module
+ */
+
+/**
+ *  Implementation of hook_install()
+ */
+function node_announce_install() {
+  drupal_install_schema('node_announce');
+}
+
+/**
+ *  Implementation of hook_uninstall()
+ */
+function node_announce_uninstall() {
+  drupal_uninstall_schema('node_announce');
+}
+
+/**
+ *  Implementation of hook_schema()
+ */
+function node_announce_schema() {
+  $schema = array();
+  $schema['node_announce'] = array(
+    'fields' => array(
+      'id' => array('type' => 'serial', 'not null' => TRUE),
+      'node_types' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'email' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'message' => array('type' => 'text', 'size' => 'small', 'not null' => FALSE),
+      'date_field' => array('type' => 'varchar', 'length' => '50', 'not null' => TRUE),
+    ),
+    'primary key' => array('id'),
+  );
+
+  $schema['node_announce_records'] = array(
+    'fields' => array(
+      'nid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'aid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'last_sent' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE),
+    ),
+    'primary key' => array('nid', 'aid')
+  );
+
+  return $schema;
+}
