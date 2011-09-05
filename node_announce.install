@@ -30,6 +30,7 @@ function node_announce_schema() {
       'email' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
       'message' => array('type' => 'text', 'size' => 'small', 'not null' => FALSE),
       'date_field' => array('type' => 'varchar', 'length' => '50', 'not null' => TRUE),
+      'node_type' => array('type' => 'varchar', 'length' => '50', 'not null' => TRUE),
     ),
     'primary key' => array('id'),
   );
