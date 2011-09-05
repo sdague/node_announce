@@ -18,16 +18,17 @@ function node_announce_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['admin/settings/node_announce/list'] = array(
-    'title' => t('Node Announcement List'),
+    'title' => t('List'),
     'description' => t('Change settings for the Node Announcements'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form_list'),
     'access arguments' => array('administer node announcements'),
     'type' =>MENU_LOCAL_TASK,
+    'weight' => -10,
     'file' => 'node_announce.admin.inc',
   );
   $items['admin/settings/node_announce/add'] = array(
-    'title' => t('Add Node Announcement'),
+    'title' => t('Add New'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form_add'),
     'access arguments' => array('administer node announcements'),
