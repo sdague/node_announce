@@ -26,9 +26,9 @@ function node_announce_load($id) {
 function node_announce_save(&$announce) {
     $announce_current = node_announce_load($announce->id);
     if ($announce_current) {
-        drupal_write_record('node_announce', $announce, 'id');
+        return drupal_write_record('node_announce', $announce, 'id');
     } else {
-        drupal_write_record('node_announce', $announce);
+        return drupal_write_record('node_announce', $announce);
     }
 }
 

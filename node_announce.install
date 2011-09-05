@@ -26,11 +26,13 @@ function node_announce_schema() {
   $schema['node_announce'] = array(
     'fields' => array(
       'id' => array('type' => 'serial', 'not null' => TRUE),
-      'node_types' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
-      'email' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
-      'message' => array('type' => 'text', 'size' => 'small', 'not null' => FALSE),
-      'date_field' => array('type' => 'varchar', 'length' => '50', 'not null' => TRUE),
-      'node_type' => array('type' => 'varchar', 'length' => '50', 'not null' => TRUE),
+      'email_from' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'email_to' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'schedule' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'subject' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'message' => array('type' => 'text', 'size' => 'medium', 'not null' => FALSE),
+      'date_field' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'active' => array('type' => 'int', 'size' => 'tiny', 'default' => 1, 'not null' => TRUE)
     ),
     'primary key' => array('id'),
   );

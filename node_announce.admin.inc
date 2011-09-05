@@ -66,14 +66,28 @@ function node_announce_form_add($form_state) {
   );
 
   $form['subject'] = array(
-    '#title' => t('Announce Subject'),
+    '#title' => t('Announcement Subject'),
     '#type' => 'textfield',
   );
 
-  $form['body'] = array(
-    '#title' => t('Announce Text'),
+  $form['message'] = array(
+    '#title' => t('Announcement Text'),
     '#type' => 'textarea',
   );
+
+  if (module_exists('token')) {
+    $form['view']['token_help'] = array(
+      '#title' => t('Replacement patterns'),
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      //      '#description' => t('Prefer raw-text replacements for text to avoid problems with HTML entities!'),
+    );
+
+    $form['view']['token_help']['help'] = array(
+      '#value' => theme('token_help', 'node'),
+    );
+  }
 
   $form['checkout']['submit'] = array(
     '#type' => 'submit',
@@ -95,5 +109,19 @@ function node_announce_form_add_validate($form, &$form_state) {
   if (!valid_email_address($form_state['values']['email_to'])) {
     form_set_error('email_to', t('Email to must be valid email address'));
   }
+}
 
+function node_announce_form_add_submit($form_id, &$form_state) {
+  _node_announce_load_api();
+
+  $obj = (object)$form_state['values'];
+
+  if(node_announce_save($obj)) {
+    drupal_set_message(t('Successfully created announcment: @name',
+        array('@name' => $obj->name)));
+  } else {
+    drupal_set_message(t('Failed to create announcment: @name',
+        array('@name' => $obj->name)), 'error');
+  }
+  $form_state['redirect'] = 'admin/settings/node_announce/list';
 }
