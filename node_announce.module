@@ -66,3 +66,11 @@ function node_announce_nodeapi(&$node, $op, $a3, $a4) {
 function node_announce_cron() {
   node_announce_process();
 }
+
+/**
+ * Load API calls, which gives us access to DB and permissions checks
+ */
+function _node_announce_load_api() {
+  require_once('./' . drupal_get_path('module', 'node_announce') . '/node_announce_api.inc');
+}
+

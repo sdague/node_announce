@@ -33,6 +33,19 @@ function node_announce_save(&$announce) {
 }
 
 /**
+ * This returns a list of date field options
+ */
+
+function node_announce_date_field_options() {
+  $fields = array();
+  $results = db_query("SELECT c.type_name, c.field_name, c.label, n.name from {content_node_field_instance} c INNER JOIN {node_type} n ON c.type_name=n.type where c.widget_module='date' ORDER BY n.name, c.label");
+  while($obj = db_fetch_object($results)) {
+    $fields[$obj->type_name . ":" . $obj->field_name] = $obj->name . " - " . $obj->label;
+  }
+  return $fields;
+}
+
+/**
  *
  *  For a given announce, figure out which nodes are in the time window. This requires selecting by node type
  */
