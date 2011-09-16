@@ -13,6 +13,13 @@ function node_announce_form_list(&$form_state) {
     '#value' => t('Below are a list of active announcements.')
   );
 
+  $announces = node_announce_list();
+
+  $form['content'] = array(
+    '#value' => theme('node_announce_list', $announces)
+  );
+
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),

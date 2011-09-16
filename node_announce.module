@@ -75,3 +75,19 @@ function _node_announce_load_api() {
   require_once('./' . drupal_get_path('module', 'node_announce') . '/node_announce_api.inc');
 }
 
+function node_announce_theme() {
+  $path = drupal_get_path('module', 'node_announce');
+  $base = array(
+    'path' => "$path/theme"
+  );
+
+  // TODO: get forms in here as well, though I was having an issue getting
+  // them to take parameters as well as the form parameters
+  $themes = array(
+    'node_announce_list' => $base + array(
+      'template' => 'node-announce-list',
+      'arguments' => array('announces' => array())
+    ),
+  );
+  return $themes;
+}

@@ -19,6 +19,16 @@ function node_announce_load($id) {
     }
 }
 
+
+function node_announce_list() {
+  $results = array();
+  $r = db_query("SELECT * from {node_announce}");
+  while($obj = db_fetch_object($r)) {
+    $results[] = $obj;
+  }
+  return $results;
+}
+
 /**
  * Function to save a node announce, could be new or old
  *
