@@ -15,24 +15,31 @@ function node_announce_menu() {
   $items['admin/settings/node_announce'] = array(
     'title' => t('Node Announcements'),
     'description' => t('Configure node announcements'),
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-  );
-  $items['admin/settings/node_announce/list'] = array(
-    'title' => t('List'),
-    'description' => t('Change settings for the Node Announcements'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form_list'),
     'access arguments' => array('administer node announcements'),
-    'type' =>MENU_LOCAL_TASK,
-    'weight' => -10,
     'file' => 'node_announce.admin.inc',
   );
+  $items['admin/settings/node_announce/list'] = array(
+    'title' => t('List'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -1,
+  );
   $items['admin/settings/node_announce/add'] = array(
-    'title' => t('Add New'),
+    'title' => t('Add Announce'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form_add'),
     'access arguments' => array('administer node announcements'),
     'type' => MENU_LOCAL_TASK,
+    'file' => 'node_announce.admin.inc',
+  );
+  $items['admin/settings/node_announce/preview/%node_announce'] = array(
+    'title callback' => 'node_announce_preview_title',
+    'title arguments' => array(3),
+    'page callback' => 'node_announce_preview',
+    'page arguments' => array(3),
+    'access arguments' => array('administer node announcements'),
+    'type' => MENU_CALLBACK,
     'file' => 'node_announce.admin.inc',
   );
   return $items;

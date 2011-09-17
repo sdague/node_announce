@@ -1,6 +1,17 @@
 <?php
 
 /**
+ *
+ *
+ */
+
+function node_announce_preview($id) {
+  _node_announce_load_api();
+  drupal_set_message("I got to this function!!!!");
+  return "<h1>This returns!</h1>";
+}
+
+/**
  * @file
  * This provides the admin interface for node_announce
  */
