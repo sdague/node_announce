@@ -54,7 +54,7 @@ function node_announce_form_add($form_state) {
     '#description' => t('The node type and datefield to trigger the announce on')
   );
 
-  $form['schedule'] = array(
+  $form['days_before'] = array(
     '#title' => t('Announce Schedule (Days before event)'),
     '#type' => 'textfield',
     '#description' => t('Number of Days prior to event to send announce'),
@@ -107,8 +107,8 @@ function node_announce_form_add_validate($form, &$form_state) {
   if (!$form_state['values']['name']) {
     form_set_error('name', t('Name can not be blank'));
   }
-  if (($form_state['values']['schedule'] == 0) || !preg_match("/^\d+$/", $form_state['values']['schedule'])) {
-    form_set_error('schedule', t('Days must be a positive integer'));
+  if (($form_state['values']['days_before'] == 0) || !preg_match("/^\d+$/", $form_state['values']['days_before'])) {
+    form_set_error('days_before', t('Days must be a positive integer'));
   }
   if (!valid_email_address($form_state['values']['email_from'])) {
     form_set_error('email_from', t('Email from must be valid email address'));

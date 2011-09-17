@@ -22,7 +22,7 @@ function node_announce_load($id) {
 
 function node_announce_list() {
   $results = array();
-  $r = db_query("SELECT * from {node_announce} ORDER BY date_field, schedule");
+  $r = db_query("SELECT * from {node_announce} ORDER BY date_field, days_before");
   while($obj = db_fetch_object($r)) {
     $results[] = $obj;
   }

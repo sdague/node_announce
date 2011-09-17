@@ -12,14 +12,15 @@
    */
 ?>
 <div class="node-announce-list">
-  <table><tr><th>From</th><th>To</th><th>Type</th><th>Subject</th><th>Days Before</th></tr>
+  <table><tr><th>Name</th><th>From</th><th>To</th><th>Type</th><th>Subject</th><th>Days Before</th></tr>
   <?php foreach($announces as $item): ?>
   <tr>
+    <td><?php print $item->name; ?></td>
     <td><?php print $item->email_from; ?></td>
     <td><?php print $item->email_to; ?></td>
     <td><?php print $item->date_field; ?></td>
     <td><?php print $item->subject; ?></td>
-    <td><?php print $item->schedule; ?></td>
+    <td><?php print $item->days_before; ?></td>
   </tr>
   <?php endforeach; ?>
   </table>
