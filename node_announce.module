@@ -97,6 +97,10 @@ function node_announce_theme() {
       'template' => 'node-announce-list',
       'arguments' => array('announces' => array())
     ),
+    'node_announce_preview' => $base + array(
+      'template' => 'node-announce-preview',
+      'arguments' => array('announce' => NULL, 'node' => NULL)
+    ),
   );
   return $themes;
 }

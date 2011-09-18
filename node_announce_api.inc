@@ -57,6 +57,35 @@ function node_announce_date_field_options() {
 
 /**
  *
+ * QUERY that we are looking for
+ SELECT *
+FROM  `content_field_meeting_date` ,  `node`
+WHERE node.type =  'meeting'
+AND node.nid = content_field_meeting_date.nid
+AND content_field_meeting_date.field_meeting_date_value > NOW( )
+ORDER BY content_field_meeting_date.field_meeting_date_value ASC , content_field_meeting_date.vid DESC
+
+
+ */
+
+function node_announce_next_match($ann) {
+  $array = explode(":", $ann->date_field);
+  $type = $array[0];
+  $field = $array[1];
+  $fv = $field . "_value";
+
+  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv > NOW() ORDER BY c.$fv ASC, c.vid DESC", $type);
+  $nid = db_fetch_object($r);
+  $node = node_load($nid->nid);
+  return $node;
+}
+
+/* function node_announce_find_preview_node($ann) { */
+/*   db_query("SELECT n.nid FROM {node */
+/* } */
+
+/**
+ *
  *  For a given announce, figure out which nodes are in the time window. This requires selecting by node type
  */
 

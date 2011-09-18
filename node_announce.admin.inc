@@ -5,10 +5,12 @@
  *
  */
 
-function node_announce_preview($id) {
+function node_announce_preview($func, $id) {
+  // TODO: no idea why I can't capture the idea directly
   _node_announce_load_api();
-  drupal_set_message("I got to this function!!!!");
-  return "<h1>This returns!</h1>";
+  $ann = node_announce_load($id);
+  $node = node_announce_next_match($ann);
+  return theme('node_announce_preview', $ann, $node);
 }
 
 /**
