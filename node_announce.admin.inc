@@ -5,7 +5,7 @@
  *
  */
 
-function node_announce_preview($func, $id) {
+function node_announce_preview($id) {
   // TODO: no idea why I can't capture the idea directly
   _node_announce_load_api();
   $ann = node_announce_load($id);
@@ -45,18 +45,24 @@ function node_announce_form_list(&$form_state) {
  * Node add announcements
  */
 
-function node_announce_form_add($form_state) {
+function node_announce_form($form_state, $aid) {
   _node_announce_load_api();
-  $ann = (object)$form_state['values'];
+
+  $ann = node_announce_load($aid);
+
+  if (!$ann) {
+    $ann = (object)$form_state['values'];
+  }
 
   $form['id'] = array(
     '#type' => 'value',
-    '#value' => $ann->id
+    '#default_value' => $ann->id
   );
 
   $form['name'] = array(
     '#title' => t('Name'),
     '#type' => 'textfield',
+    '#default_value' => $ann->name,
     '#description' => t('Name for this announcement')
   );
 
@@ -64,34 +70,40 @@ function node_announce_form_add($form_state) {
     '#title' => t('Node type / Date field'),
     '#type' => 'select',
     '#options' => node_announce_date_field_options(),
+    '#default_value' => $ann->date_field,
     '#description' => t('The node type and datefield to trigger the announce on')
   );
 
   $form['days_before'] = array(
     '#title' => t('Announce Schedule (Days before event)'),
     '#type' => 'textfield',
+    '#default_value' => $ann->days_before,
     '#description' => t('Number of Days prior to event to send announce'),
   );
 
   $form['email_from'] = array(
     '#title' => t('Sender Email'),
     '#type' => 'textfield',
+    '#default_value' => $ann->email_from,
     '#description' => t('Email address of sender')
   );
 
   $form['email_to'] = array(
     '#title' => t('Recipient Email'),
     '#type' => 'textfield',
+    '#default_value' => $ann->email_to,
     '#description' => t('Email address of sender')
   );
 
   $form['subject'] = array(
     '#title' => t('Announcement Subject'),
+    '#default_value' => $ann->subject,
     '#type' => 'textfield',
   );
 
   $form['message'] = array(
     '#title' => t('Announcement Text'),
+    '#default_value' => $ann->message,
     '#type' => 'textarea',
   );
 
@@ -116,7 +128,7 @@ function node_announce_form_add($form_state) {
   return $form;
 }
 
-function node_announce_form_add_validate($form, &$form_state) {
+function node_announce_form_validate($form, &$form_state) {
   if (!$form_state['values']['name']) {
     form_set_error('name', t('Name can not be blank'));
   }
@@ -131,7 +143,7 @@ function node_announce_form_add_validate($form, &$form_state) {
   }
 }
 
-function node_announce_form_add_submit($form_id, &$form_state) {
+function node_announce_form_submit($form_id, &$form_state) {
   _node_announce_load_api();
 
   $obj = (object)$form_state['values'];

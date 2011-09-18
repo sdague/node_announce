@@ -56,6 +56,15 @@ function node_announce_date_field_options() {
 }
 
 /**
+ * Pretty name for date field
+ */
+function node_announce_date_field_pretty($field) {
+  $fields = node_announce_date_field_options();
+  return $fields[$field];
+}
+
+
+/**
  *
  * QUERY that we are looking for
  SELECT *
@@ -68,17 +77,24 @@ ORDER BY content_field_meeting_date.field_meeting_date_value ASC , content_field
 
  */
 
-function node_announce_next_match($ann) {
+function node_announce_next_match($ann, $before = FALSE) {
   $array = explode(":", $ann->date_field);
   $type = $array[0];
   $field = $array[1];
   $fv = $field . "_value";
 
-  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv > NOW() ORDER BY c.$fv ASC, c.vid DESC", $type);
+  if (!$before) {
+    $clause = "> NOW() ORDER BY c.$fv ASC";
+  } else {
+    $clause = "< NOW() ORDER BY c.$fv DESC";
+  }
+
+  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv $clause, c.vid DESC", $type);
   $nid = db_fetch_object($r);
   $node = node_load($nid->nid);
   return $node;
 }
+
 
 /* function node_announce_find_preview_node($ann) { */
 /*   db_query("SELECT n.nid FROM {node */
