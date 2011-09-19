@@ -12,9 +12,8 @@
    */
 ?>
 <div class="node-announce-preview">
-     <?php print_r($node); ?>
-     <div id="node-announce-preview-from">From: <?php print $announce->email_from; ?></div>
-     <div id="node-announce-preview-from">To: <?php print $announce->email_to; ?></div>
-     <div id="node-announce-preview-from">Subject: <?php print token_replace($announce->subject, 'node', $node); ?></div>
-     <div id="node-announce-preview-from"><?php print $announce->body; ?></div>
+  <div id="node-announce-preview-from">From: <?php print $announce->email_from; ?></div>
+  <div id="node-announce-preview-to">To: <?php print $announce->email_to; ?></div>
+     <div id="node-announce-preview-subject">Subject: <?php print token_replace($announce->subject, 'node', $node); ?></div>
+<div id="node-announce-preview-body"><?php print token_replace($announce->message, 'node', $node); ?></div>
 </div>
