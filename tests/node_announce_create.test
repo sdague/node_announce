@@ -1,0 +1,65 @@
+<?php
+/**
+ * Basic sanity testing for node_announce
+ */
+require_once "node_announce_test_case.inc";
+
+class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
+  /**
+   * User with rights to post SimpleTest Example content.
+   */
+  protected $privileged_user;
+
+  /**
+   * getInfo() returns properties that are displayed in the test selection form.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Node Announce Basic Test',
+      'description' => 'Ensure that node_announce has minimal functionality for release',
+      'group' => 'Node Announce',
+    );
+  }
+
+  /**
+   * setUp() performs any pre-requisite tasks that need to happen.
+   */
+  public function setUp() {
+    // Enable any modules required for the test.
+    parent::setUp('content', 'date_api', 'date_repeat', 'date', 'node_announce');
+
+    // Create and log in our privileged user.
+    $privs = array(
+      'access content',
+      'create meeting content',
+      'edit any meeting content',
+      'administer node announcements'
+    );
+
+    $this->drupalCreateContentType(array(
+        'type' => 'meeting',
+        'name' => 'Meeting',
+      ));
+
+    $this->privileged_user = $this->drupalCreateUser($privs);
+    $this->drupalLogin($this->privileged_user);
+
+    $this->drupalGet('user');
+
+    $this->createDateField();
+
+    $this->drupalCreateNode(array("title" => "Page 1"));
+    $this->drupalCreateNode(array("title" => "Page 2"));
+
+    $this->drupalCreateNode(array("title" => "Story 1", "type" => "story"));
+    $this->drupalCreateNode(array("title" => "Story 2", "type" => "story"));
+
+    $this->CreateMeeting(array("title" => "Meeting 1", "meeting_date" => "2011-09-11 18:00"));
+  }
+
+  public function testCreateMeeting() {
+    $this->CreateMeeting(array("title" => "Meeting 2", "meeting_date" => "2011-09-11 18:00"));
+    $this->drupalGet("node/6");
+    $this->assertText("Meeting 2");
+  }
+}
