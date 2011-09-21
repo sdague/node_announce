@@ -129,11 +129,11 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
 
   public function CreateMeeting($options) {
     $this->drupalGet('node/add/meeting');
-    if ($options['meeting_date']) {
+    if (array_key_exists('meeting_date', $options)) {
       $options['field_meeting_date[value][date]'] = $options['meeting_date'];
       unset($options['meeting_date']);
     }
-    if ($options['meeting_date_to']) {
+    if (array_key_exists('meeting_date_to', $options)) {
       $options['field_meeting_date[value2][date]'] = $options['meeting_date_to'];
       unset($options['meeting_date_to']);
     }

@@ -9,6 +9,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
    * User with rights to post SimpleTest Example content.
    */
   protected $privileged_user;
+  private $format = "%Y-%m-%d H:i";
 
   /**
    * getInfo() returns properties that are displayed in the test selection form.
@@ -54,12 +55,47 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->drupalCreateNode(array("title" => "Story 1", "type" => "story"));
     $this->drupalCreateNode(array("title" => "Story 2", "type" => "story"));
 
-    $this->CreateMeeting(array("title" => "Meeting 1", "meeting_date" => "2011-09-11 18:00"));
+    $this->CreateMeeting(array("title" => "Meeting 1", "meeting_date" => date($this->format, time() + 24*60*60)));
+    $this->CreateMeeting(array("title" => "Meeting 2", "meeting_date" => date($this->format, time() + 20*60*60)));
   }
 
-  public function testCreateMeeting() {
-    $this->CreateMeeting(array("title" => "Meeting 2", "meeting_date" => "2011-09-11 18:00"));
-    $this->drupalGet("node/6");
-    $this->assertText("Meeting 2");
+  public function _checkAnnounceForm() {
+    $this->drupalGet("admin/settings/node_announce/add");
+    $this->assertFieldById("edit-name", "", "Name field exists");
+    $this->assertFieldById("edit-days-before", "", "Day's before exists");
+    $this->assertFieldById("edit-email-to", "", "Check for Email to");
+    $this->assertFieldById("edit-email-from", "", "Check for Email from");
+    $this->assertFieldById("edit-subject", "", "Subject exists");
+    $this->assertFieldById("edit-message", "", "Message Exists");
+
+  }
+
+  public function testFormValidation() {
+    $this->drupalGet("admin/settings/node_announce/add");
+    $this->drupalPost(NULL, array(), t("Submit"));
+
+    $this->assertText("Name can not be blank");
+    $this->assertText("Days must be a positive integer");
+    $this->assertText("Email from must be valid email address");
+    $this->assertText("Email to must be valid email address");
+
+    $values = array(
+      "name" => $this->randomString(),
+      "days_before" => "-5",
+      "email_from" => "a@b.com",
+      "email_to" => "a@c.com"
+    );
+
+    $this->drupalPost(NULL, $values, t("Submit"));
+
+    $this->assertNoText("Name can not be blank");
+    $this->assertText("Days must be a positive integer");
+    $this->assertNoText("Email from must be valid email address");
+    $this->assertNoText("Email to must be valid email address");
+
+  }
+
+  public function testCreateMeetingForm() {
+    $this->_checkAnnounceForm();
   }
 }

@@ -45,13 +45,23 @@ function node_announce_form_list(&$form_state) {
  * Node add announcements
  */
 
-function node_announce_form($form_state, $aid) {
+function node_announce_form($form_state, $aid = NULL) {
   _node_announce_load_api();
 
-  $ann = node_announce_load($aid);
-
-  if (!$ann) {
-    $ann = (object)$form_state['values'];
+  if ($aid) {
+    $ann = node_announce_load($aid);
+  } else {
+    // TODO: there must be a better pattern for a single form for add and edit
+    $ann = (object)array(
+                         "id" => NULL,
+                         "name" => NULL,
+                         "date_field" => NULL,
+                         "email_to" => NULL,
+                         "email_from" => NULL,
+                         "message" => NULL,
+                         "subject" => NULL,
+                         "days_before" => NULL
+                         );
   }
 
   $form['id'] = array(
