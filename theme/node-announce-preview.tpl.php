@@ -13,7 +13,6 @@
 ?>
 <div class="node-announce-preview">
 
-  <pre><?php print var_export(content_fields('field_meeting_date', 'meeting'), true); ?></pre>
   <div id="node-announce-preview-from">From: <?php print $announce->email_from; ?></div>
   <div id="node-announce-preview-to">To: <?php print $announce->email_to; ?></div>
   <div id="node-announce-preview-subject">Subject: <?php print token_replace($announce->subject, 'node', $node); ?></div>
