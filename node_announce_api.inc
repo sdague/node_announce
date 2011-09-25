@@ -95,16 +95,44 @@ function node_announce_next_match($ann, $before = FALSE) {
   return $node;
 }
 
-
-/* function node_announce_find_preview_node($ann) { */
-/*   db_query("SELECT n.nid FROM {node */
-/* } */
-
 /**
  *
  *  For a given announce, figure out which nodes are in the time window. This requires selecting by node type
  */
 
 function node_announce_applicable_nodes($ann) {
+  $array = explode(":", $ann->date_field);
+  $type = $array[0];
+  $field = $array[1];
+  $fv = $field . "_value";
+  $nodes = array();
 
+  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv > DATE_SUB(NOW(), INTERVAL '1' DAYS) AND c.$fv < DATE_ADD(NOW(), INTERVAL '1' DAYS)", $type);
+  while($nid = db_fetch_object($r)) {
+    $node = node_load($nid->nid);
+    $nodes[] = $node;
+  }
+  return $nodes;
+}
+
+/**
+ * TODO: Repeating events are going to need more work
+ */
+
+function node_announce_already_announced($ann, $node) {
+  $row = db_fetch_object(db_query("SELECT last_sent from {node_announce_records} n WHERE n.nid=%d and n.aid=%d", $node->nid, $ann->id));
+  if ($row) {
+    return $row->last_sent;
+  } else {
+    return NULL;
+  }
+}
+
+function node_announce_record_send($aid, $nid) {
+  $obj = (object)array(
+                       "nid" => $nid,
+                       "aid" => $aid,
+                       "last_sent" => time()
+                       );
+  db_write_record('node_announce_records', $obj);
 }

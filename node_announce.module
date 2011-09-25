@@ -84,6 +84,7 @@ function node_announce_nodeapi(&$node, $op, $a3, $a4) {
  *  Go through all the announcements and set
  */
 function node_announce_cron() {
+  _node_announce_load_api();
   node_announce_process();
 }
 
@@ -113,4 +114,43 @@ function node_announce_theme() {
     ),
   );
   return $themes;
+}
+
+
+function node_announce_mail($key, &$message, $params) {
+  if ($key == 'node_announce') {
+    $node = $params['node'];
+    $ann = $params['announce'];
+
+    $message['to'] = $ann->email_to;
+    $message['from'] = $ann->email_from;
+    $message['subject'] = token_replace($ann->subject, 'node', $node);
+    $message['body'] = token_replace($ann->message, 'node', $node);
+  }
+}
+
+/***
+ *
+ */
+
+function node_announce_process() {
+
+  $announces = node_announce_list();
+
+  foreach ($announces as $ann) {
+    $nodes = node_announce_applicable_nodes($ann);
+
+    foreach ($nodes as $node) {
+      if (! node_announce_already_announced($ann, $node)) {
+        node_announce_send_announce($ann, $node);
+        node_announce_record_send($ann->id, $node->nid);
+      }
+    }
+  }
+}
+
+
+function node_announce_send_announce($ann, $node) {
+  $params = array('announce' => $ann, 'node' => $node);
+  $result = drupal_mail('node_announce', 'node_announce', $ann->email_to, language_default(), $params);
 }
