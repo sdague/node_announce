@@ -162,4 +162,5 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
   protected function cronRun() {
     $this->drupalGet($GLOBALS['base_url'] . '/cron.php', array('external' => TRUE, 'query' => array('cron_key' => variable_get('cron_key', 'drupal'))));
   }
+
 }

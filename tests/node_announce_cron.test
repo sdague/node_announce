@@ -81,8 +81,10 @@ class NodeAnnounceCronTestCase extends NodeAnnounceTestCase {
 
   public function testCronSend() {
     $this->cronRun();
-    $emails = variable_get('drupal_test_email_collector', array());
 
-    $this->assertMail("subject", "This is a test", "Testing for email subject");
+    $this->assertMail("to", "sean@dague.net", "Testing for email name");
+    $this->assertMail("from", "sean@dague.net", "Testing for email from");
+    $this->assertMail("body", "Test message one\n", "Testing for email message");
+    $this->assertMail("subject", "This is a test\n", "Testing for email subject");
   }
 }
