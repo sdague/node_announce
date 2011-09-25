@@ -97,5 +97,15 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
   public function testCreateMeetingForm() {
     $this->_checkAnnounceForm();
+    $this->CreateAnnounce(array(
+        "name" => "Announce 1",
+        "days_before" => 5,
+        "email_from" => "a@b.com",
+        "email_to" => "a@c.com",
+        "date_field" => "meeting:field_meeting_date"
+      ));
+    $this->drupalGet("admin/settings/node_announce");
+    $this->assertText("Announce 1");
+
   }
 }

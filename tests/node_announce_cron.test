@@ -1,0 +1,88 @@
+<?php
+/**
+ * Basic sanity testing for node_announce
+ */
+require_once "node_announce_test_case.inc";
+
+class NodeAnnounceCronTestCase extends NodeAnnounceTestCase {
+  /**
+   * User with rights to post SimpleTest Example content.
+   */
+  protected $privileged_user;
+  private $format = "Y-m-d H:i";
+
+  /**
+   * getInfo() returns properties that are displayed in the test selection form.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Node Announce Cron Test',
+      'description' => 'Ensure that node_announce sends emails correctly',
+      'group' => 'Node Announce',
+    );
+  }
+
+  /**
+   * setUp() performs any pre-requisite tasks that need to happen.
+   */
+  public function setUp() {
+    // Enable any modules required for the test.
+    parent::setUp('content', 'date_api', 'date_repeat', 'date', 'token', 'node_announce');
+
+    // Create and log in our privileged user.
+    $privs = array(
+      'access content',
+      'create meeting content',
+      'edit any meeting content',
+      'administer node announcements'
+    );
+
+    $this->drupalCreateContentType(array(
+        'type' => 'meeting',
+        'name' => 'Meeting',
+      ));
+
+    $this->privileged_user = $this->drupalCreateUser($privs);
+    $this->drupalLogin($this->privileged_user);
+
+    $this->drupalGet('user');
+
+    $this->createDateField();
+
+    $this->drupalCreateNode(array("title" => "Page 1"));
+    $this->drupalCreateNode(array("title" => "Page 2"));
+
+    $this->drupalCreateNode(array("title" => "Story 1", "type" => "story"));
+    $this->drupalCreateNode(array("title" => "Story 2", "type" => "story"));
+
+    $this->CreateMeeting(array(
+        "title" => "Meeting 1",
+        "meeting_date" => date($this->format, time() + 24*60*60 * 5),
+        "meeting_date_to" => date($this->format, time() + 24*60*60 * 5 + 60*60),
+      ));
+    $this->CreateMeeting(array(
+        "title" => "Meeting 2",
+        "meeting_date" => date($this->format, time() + 24*60*60 * 7),
+        "meeting_date_to" => date($this->format, time() + 24*60*60 * 7 + 60*60)
+      ));
+
+    $this->drupalGet("node/5");
+
+    $this->CreateAnnounce(array(
+        "name" => "Meeting Announce 1",
+        "email_from" => "sean@dague.net",
+        "email_to" => "sean@dague.net",
+        "subject" => "This is a test",
+        "message" => "Test message one",
+        "days_before" => "5",
+        "date_field" => "meeting:field_meeting_date"
+      ));
+  }
+
+  public function testCronSend() {
+    $this->cronRun();
+    $emails = variable_get('drupal_test_email_collector', array());
+
+    $this->assertMail("subject", "This is a test", "Testing for email subject");
+  }
+}

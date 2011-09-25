@@ -141,6 +141,11 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
     $this->drupalPost(NULL, $options, t('Save'));
   }
 
+  public function CreateAnnounce($options) {
+    $this->drupalGet('admin/settings/node_announce/add');
+    $this->drupalPost(NULL, $options, t('Submit'));
+  }
+
   public function Get($url)
   {
     return $this->drupalGet($url);
@@ -149,5 +154,12 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
   public function Post($one, $two, $three)
   {
     return $this->drupalPost($one, $two, $three);
+  }
+
+   /**
+   * Runs cron in the Drupal installed by Simpletest.
+   */
+  protected function cronRun() {
+    $this->drupalGet($GLOBALS['base_url'] . '/cron.php', array('external' => TRUE, 'query' => array('cron_key' => variable_get('cron_key', 'drupal'))));
   }
 }
