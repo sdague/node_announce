@@ -117,37 +117,22 @@ function node_announce_theme() {
 }
 
 
-/**
- * TODO: make this strip out all the html formatting for plain sending
- */
-
-function node_announce_mail($key, &$message, $params) {
-  if ($key == 'node_announce') {
-    $node = $params['node'];
-    $ann = $params['announce'];
-
-    $message['to'] = $ann->email_to;
-    $message['from'] = $ann->email_from;
-    $message['subject'] = token_replace($ann->subject, 'node', $node);
-    $message['body'] = token_replace($ann->message, 'node', $node);
-  }
-}
 
 /***
  *
  */
 
 function node_announce_process() {
-  drupal_set_message("Running node_announce cron job");
+  // drupal_set_message("Running node_announce cron job");
 
   $announces = node_announce_list();
 
-  drupal_set_message("Got the following announces: " . print_r($announces, TRUE));
+  // drupal_set_message("Got the following announces: " . print_r($announces, TRUE));
 
   foreach ($announces as $ann) {
     $nodes = node_announce_applicable_nodes($ann);
 
-    drupal_set_message("Announce " . $ann->id . " got the following nodes: " . print_r($nodes, TRUE));
+    // drupal_set_message("Announce " . $ann->id . " got the following nodes: " . print_r($nodes, TRUE));
 
     foreach ($nodes as $node) {
       if (! node_announce_already_announced($ann, $node)) {
@@ -158,22 +143,47 @@ function node_announce_process() {
   }
 }
 
+/***
+ * node_announce_send_announce : send email announcement out
+ *
+ * We prefer mimemail if that exists, but will also use the basic drupal mail
+ * infrastructure as a fall back.
+ */
 
 function node_announce_send_announce($ann, $node) {
-  $result = mimemail(
-    $ann->email_from,
-    $ann->email_to,
-    token_replace($ann->subject, 'node', $node),
-    token_replace($ann->message, 'node', $node),
-    NULL, /* plain text only */
-    array(),  /* additional headers */
-    NULL, /* custom plain text */
-    array(), /* attachments .... maybe put ical here later? */
-    'node_announce'
-  );
+  if (module_exists('mimemail')) {
+    $result = mimemail(
+      $ann->email_from,
+      $ann->email_to,
+      token_replace($ann->subject, 'node', $node),
+      token_replace($ann->message, 'node', $node),
+      NULL, /* plain text only */
+      array(),  /* additional headers */
+      NULL, /* custom plain text */
+      array(), /* attachments .... maybe put ical here later? */
+      'node_announce'
+    );
+  } else {
+    $params = array('announce' => $ann, 'node' => $node);
+    $result = drupal_mail('node_announce', 'node_announce', $ann->email_to, language_default(), $params);
+  }
 
-  /*** TODO: gracefully work without mimemail
-  $params = array('announce' => $ann, 'node' => $node);
-  $result = drupal_mail('node_announce', 'node_announce', $ann->email_to, language_default(), $params); */
+}
 
+/**
+ * node_announce_mail : implementation of hook_mail()
+ *
+ * This is only called if mimemail isn't installed,
+ */
+
+function node_announce_mail($key, &$message, $params) {
+  if ($key == 'node_announce') {
+    $node = $params['node'];
+    $ann = $params['announce'];
+
+    $message['to'] = $ann->email_to;
+    $message['from'] = $ann->email_from;
+    $message['subject'] = drupal_html_to_text(token_replace($ann->subject, 'node', $node));
+    $message['body'] = drupal_html_to_text(token_replace($ann->message, 'node', $node));
+  }
 }
