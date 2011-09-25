@@ -107,7 +107,12 @@ function node_announce_applicable_nodes($ann) {
   $fv = $field . "_value";
   $nodes = array();
 
-  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv > DATE_SUB(NOW(), INTERVAL '1' DAYS) AND c.$fv < DATE_ADD(NOW(), INTERVAL '1' DAYS)", $type);
+  $before = strftime("%Y-%m-%d %H:%M", time() + 24*60*60 * ($ann->days_before - 1));
+  $after = strftime("%Y-%m-%d %H:%M", time() + 24*60*60 * ($ann->days_before + 1));
+
+  drupal_set_message("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='$type' AND n.nid = c.nid AND c.$fv > '$before' AND c.$fv < '$after'");
+
+  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv > '%s' AND c.$fv < '%s'", $type, $before, $after);
   while($nid = db_fetch_object($r)) {
     $node = node_load($nid->nid);
     $nodes[] = $node;
@@ -134,5 +139,5 @@ function node_announce_record_send($aid, $nid) {
                        "aid" => $aid,
                        "last_sent" => time()
                        );
-  db_write_record('node_announce_records', $obj);
+  drupal_write_record('node_announce_records', $obj);
 }

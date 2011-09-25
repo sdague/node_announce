@@ -117,6 +117,10 @@ function node_announce_theme() {
 }
 
 
+/**
+ * TODO: make this strip out all the html formatting for plain sending
+ */
+
 function node_announce_mail($key, &$message, $params) {
   if ($key == 'node_announce') {
     $node = $params['node'];
@@ -134,11 +138,16 @@ function node_announce_mail($key, &$message, $params) {
  */
 
 function node_announce_process() {
+  drupal_set_message("Running node_announce cron job");
 
   $announces = node_announce_list();
 
+  drupal_set_message("Got the following announces: " . print_r($announces, TRUE));
+
   foreach ($announces as $ann) {
     $nodes = node_announce_applicable_nodes($ann);
+
+    drupal_set_message("Announce " . $ann->id . " got the following nodes: " . print_r($nodes, TRUE));
 
     foreach ($nodes as $node) {
       if (! node_announce_already_announced($ann, $node)) {
@@ -151,6 +160,20 @@ function node_announce_process() {
 
 
 function node_announce_send_announce($ann, $node) {
+  $result = mimemail(
+    $ann->email_from,
+    $ann->email_to,
+    token_replace($ann->subject, 'node', $node),
+    token_replace($ann->message, 'node', $node),
+    NULL, /* plain text only */
+    array(),  /* additional headers */
+    NULL, /* custom plain text */
+    array(), /* attachments .... maybe put ical here later? */
+    'node_announce'
+  );
+
+  /*** TODO: gracefully work without mimemail
   $params = array('announce' => $ann, 'node' => $node);
-  $result = drupal_mail('node_announce', 'node_announce', $ann->email_to, language_default(), $params);
+  $result = drupal_mail('node_announce', 'node_announce', $ann->email_to, language_default(), $params); */
+
 }
