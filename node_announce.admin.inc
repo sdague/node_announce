@@ -5,8 +5,11 @@
  *
  */
 
+
+/**
+ * the page callback for the preview function.
+ */
 function node_announce_preview($id) {
-  // TODO: no idea why I can't capture the idea directly
   _node_announce_load_api();
   $ann = node_announce_load($id);
   $node = node_announce_next_match($ann);

@@ -28,7 +28,7 @@ function node_announce_menu() {
   );
 
   $items['admin/settings/node_announce/add'] = array(
-    'title' => t('Add Announce'),
+    'title' => 'Add Announcement',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form'),
     'access arguments' => array('administer node announcements'),
@@ -38,7 +38,8 @@ function node_announce_menu() {
 
   $items['admin/settings/node_announce/%/edit'] = array(
     'type' => MENU_CALLBACK,
-    'title' => t('BAR'),
+    'title callback' => 'node_announce_title_edit',
+    'title arguments' => array(3),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form', 3),
     'access arguments' => array('administer node announcements'),
@@ -48,7 +49,7 @@ function node_announce_menu() {
 
   $items['admin/settings/node_announce/%/preview'] = array(
     'type' => MENU_CALLBACK,
-    'title' => t('FOOOOOO'),
+    'title' => 'Preview Annonucement',
     'page callback' => 'node_announce_preview',
     'page arguments' => array(3),
     'access arguments' => array('administer node announcements'),
@@ -186,4 +187,11 @@ function node_announce_mail($key, &$message, $params) {
     $message['subject'] = drupal_html_to_text(token_replace($ann->subject, 'node', $node));
     $message['body'] = drupal_html_to_text(token_replace($ann->message, 'node', $node));
   }
+}
+
+
+function node_announce_title_edit($id) {
+  _node_announce_load_api();
+  $ann = node_announce_load($id);
+  return 'Edit Node Announce: ' . $ann->name;
 }
