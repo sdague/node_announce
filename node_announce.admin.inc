@@ -1,12 +1,6 @@
 <?php
 
 /**
- *
- *
- */
-
-
-/**
  * the page callback for the preview function.
  */
 function node_announce_preview($id) {
@@ -33,12 +27,6 @@ function node_announce_form_list(&$form_state) {
 
   $form['content'] = array(
     '#value' => theme('node_announce_list', $announces)
-  );
-
-
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
   );
 
   return $form;
