@@ -70,7 +70,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
   }
 
-  public function testFormValidation() {
+  public function _checkFormValidation() {
     $this->drupalGet("admin/settings/node_announce/add");
     $this->drupalPost(NULL, array(), t("Submit"));
 
@@ -92,20 +92,34 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->assertText("Days must be a positive integer");
     $this->assertNoText("Email from must be valid email address");
     $this->assertNoText("Email to must be valid email address");
-
   }
 
-  public function testCreateMeetingForm() {
-    $this->_checkAnnounceForm();
+  public function _checkAnnounceCreate($name, $days) {
+    $this->drupalGet("admin/settings/node_announce/add");
     $this->CreateAnnounce(array(
-        "name" => "Announce 1",
-        "days_before" => 5,
+        "name" => $name,
+        "days_before" => $days,
         "email_from" => "a@b.com",
         "email_to" => "a@c.com",
-        "date_field" => "meeting:field_meeting_date"
+        "date_field" => "meeting:field_meeting_date",
+        "subject" => "[ANNOUNCE] MHVLUG Meeting [field_meeting_date-day], [field_meeting_date-month] [field_meeting_date-d] at 6pm",
+        "message" => "MHVLUG is proud to announce our [field_meeting_date-month] meeting:
+
+<h2>[title]</h2>"
       ));
     $this->drupalGet("admin/settings/node_announce");
-    $this->assertText("Announce 1");
+    $this->assertText($name, "Ensure anounce was created");
+  }
+
+  public function testBasicCreation() {
+    $this->_checkAnnounceForm();
+
+    $this->_checkFormValidation();
+
+    $this->_checkAnnounceCreate("Announce 1", 3);
+    $this->_checkAnnounceCreate("Announce 2", 5);
 
   }
+
+
 }
