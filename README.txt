@@ -71,3 +71,9 @@ like prior to going to hundreds of people.
 
 * Doesn't work with events that use the date_repeat_api. This is a
   future enhancement.
+
+** GET INVOLVED **
+
+Planning for the future of this module happens over on a trello board
+- https://trello.com/board/node-announce/4e7734b88a99f20bf70d80e3 all
+are welcome to participate
