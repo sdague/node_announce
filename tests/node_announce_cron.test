@@ -18,7 +18,7 @@ class NodeAnnounceCronTestCase extends NodeAnnounceTestCase {
     return array(
       'name' => 'Node Announce Cron Test',
       'description' => 'Ensure that node_announce sends emails correctly',
-      'group' => 'Node Announce',
+      'group' => 'NodeAnnounce',
     );
   }
 

@@ -122,10 +122,21 @@ function node_announce_form($form_state, $aid = NULL) {
     );
   }
 
-  $form['checkout']['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Submit')
-  );
+  if (!$aid) {
+    $form['buttons']['create'] = array(
+      '#type' => 'submit',
+      '#value' => t('Create')
+    );
+  } else {
+    $form['buttons']['save'] = array(
+      '#type' => 'submit',
+      '#value' => t('Save')
+    );
+    $form['buttons']['delete'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete')
+    );
+  }
   return $form;
 }
 
@@ -147,14 +158,36 @@ function node_announce_form_validate($form, &$form_state) {
 function node_announce_form_submit($form_id, &$form_state) {
   _node_announce_load_api();
 
+
   $obj = (object)$form_state['values'];
 
-  if(node_announce_save($obj)) {
-    drupal_set_message(t('Successfully created announcment: @name',
-        array('@name' => $obj->name)));
-  } else {
-    drupal_set_message(t('Failed to create announcment: @name',
-        array('@name' => $obj->name)), 'error');
+  switch ($obj->op) {
+    case: "Create":
+      if(node_announce_save($obj)) {
+        drupal_set_message(t('Successfully created announcment: @name',
+            array('@name' => $obj->name)));
+      } else {
+        drupal_set_message(t('Failed to create announcment: @name',
+            array('@name' => $obj->name)), 'error');
+      }
+      $form_state['redirect'] = 'admin/settings/node_announce/list';
+      break;
+
+    case: "Save":
+      if(node_announce_save($obj)) {
+        drupal_set_message(t('Successfully saved announcment: @name',
+            array('@name' => $obj->name)));
+      } else {
+        drupal_set_message(t('Failed to saved announcment: @name',
+            array('@name' => $obj->name)), 'error');
+      }
+      $form_state['redirect'] = 'admin/settings/node_announce/list';
+      break;
+
+    case: "Delete":
+      drupal_set_message("Delete not implemented yet");
+      break;
   }
-  $form_state['redirect'] = 'admin/settings/node_announce/list';
+
+
 }

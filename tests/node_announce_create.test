@@ -18,7 +18,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     return array(
       'name' => 'Node Announce Basic Test',
       'description' => 'Ensure that node_announce has minimal functionality for release',
-      'group' => 'Node Announce',
+      'group' => 'NodeAnnounce',
     );
   }
 
@@ -72,7 +72,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
   public function _checkFormValidation() {
     $this->drupalGet("admin/settings/node_announce/add");
-    $this->drupalPost(NULL, array(), t("Submit"));
+    $this->drupalPost(NULL, array(), t("Create"));
 
     $this->assertText("Name can not be blank");
     $this->assertText("Days must be a positive integer");
@@ -86,7 +86,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
       "email_to" => "a@c.com"
     );
 
-    $this->drupalPost(NULL, $values, t("Submit"));
+    $this->drupalPost(NULL, $values, t("Create"));
 
     $this->assertNoText("Name can not be blank");
     $this->assertText("Days must be a positive integer");
