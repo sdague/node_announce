@@ -162,7 +162,7 @@ function node_announce_form_submit($form_id, &$form_state) {
   $obj = (object)$form_state['values'];
 
   switch ($obj->op) {
-    case: "Create":
+    case "Create":
       if(node_announce_save($obj)) {
         drupal_set_message(t('Successfully created announcment: @name',
             array('@name' => $obj->name)));
@@ -173,7 +173,7 @@ function node_announce_form_submit($form_id, &$form_state) {
       $form_state['redirect'] = 'admin/settings/node_announce/list';
       break;
 
-    case: "Save":
+    case "Save":
       if(node_announce_save($obj)) {
         drupal_set_message(t('Successfully saved announcment: @name',
             array('@name' => $obj->name)));
@@ -184,7 +184,7 @@ function node_announce_form_submit($form_id, &$form_state) {
       $form_state['redirect'] = 'admin/settings/node_announce/list';
       break;
 
-    case: "Delete":
+    case "Delete":
       drupal_set_message("Delete not implemented yet");
       break;
   }
