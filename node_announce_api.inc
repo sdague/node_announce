@@ -102,8 +102,11 @@ function node_announce_next_match($ann, $before = FALSE) {
     $clause = "< NOW() ORDER BY c.$fv DESC";
   }
 
-  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv $clause, c.vid DESC", $type);
+  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv $clause", $type);
   $nid = db_fetch_object($r);
+  if (!$nid) {
+    return NULL;
+  }
   $node = node_load($nid->nid);
   return $node;
 }

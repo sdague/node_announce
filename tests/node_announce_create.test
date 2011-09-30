@@ -9,7 +9,6 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
    * User with rights to post SimpleTest Example content.
    */
   protected $privileged_user;
-  private $format = "%Y-%m-%d H:i";
 
   /**
    * getInfo() returns properties that are displayed in the test selection form.
@@ -27,7 +26,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
    */
   public function setUp() {
     // Enable any modules required for the test.
-    parent::setUp('content', 'date_api', 'date_repeat', 'date', 'node_announce');
+    parent::setUp('content', 'date_api', 'date_repeat', 'date', 'node_announce', 'token');
 
     // Create and log in our privileged user.
     $privs = array(
@@ -55,8 +54,22 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->drupalCreateNode(array("title" => "Story 1", "type" => "story"));
     $this->drupalCreateNode(array("title" => "Story 2", "type" => "story"));
 
-    $this->CreateMeeting(array("title" => "Meeting 1", "meeting_date" => date($this->format, time() + 24*60*60)));
-    $this->CreateMeeting(array("title" => "Meeting 2", "meeting_date" => date($this->format, time() + 20*60*60)));
+    $this->CreateMeeting(array(
+        "title" => "Meeting 1",
+        "meeting_date" => date($this->format, time() + 24*60*60),
+        "meeting_date_to" => date($this->format, time() + 24*60*60 + 60*60)
+      ));
+    $this->CreateMeeting(array(
+        "title" => "Meeting 2",
+        "meeting_date" => date($this->format, time() + 20*60*60),
+        "meeting_date_to" => date($this->format, time() + 20*60*60 + 60*60),
+      ));
+
+    $this->drupalGet("node/5");
+    $this->assertResponse("200");
+
+    $this->drupalGet("node/6");
+    $this->assertResponse("200");
   }
 
   public function _checkAnnounceForm() {
@@ -111,6 +124,21 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->assertText($name, "Ensure anounce was created");
   }
 
+  public function _checkAnnouncePreview($index) {
+    $wday = strftime("%A", time() + 20*60*60);
+    $month = strftime("%B", time() + 20*60*60);
+    $day = trim(strftime("%e", 20*60*60));
+
+    $this->drupalGet("admin/settings/node_announce");
+    $this->clickLink("Preview", $index);
+
+    $this->assertText("From: a@b.com", "Ensure from was found");
+    $this->assertText("To: a@c.com", "Ensure to was found");
+    $this->assertText("Subject: [ANNOUNCE] MHVLUG Meeting $wday, $month $day at 6pm", "Ensure subject is right");
+    $this->assertRaw("MHVLUG is proud to announce our $month meeting:\n\n<h2>Meeting 2</h2>", "Ensure first part of body is found");
+
+  }
+
   public function testBasicCreation() {
     $this->_checkAnnounceForm();
 
@@ -118,6 +146,9 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
     $this->_checkAnnounceCreate("Announce 1", 3);
     $this->_checkAnnounceCreate("Announce 2", 5);
+    $this->_checkAnnounceCreate("Announce 3", 8);
+
+    $this->_checkAnnouncePreview(0);
 
   }
 

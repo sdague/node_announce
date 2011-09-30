@@ -9,7 +9,6 @@ class NodeAnnounceCronTestCase extends NodeAnnounceTestCase {
    * User with rights to post SimpleTest Example content.
    */
   protected $privileged_user;
-  private $format = "Y-m-d H:i";
 
   /**
    * getInfo() returns properties that are displayed in the test selection form.

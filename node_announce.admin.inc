@@ -6,7 +6,12 @@
 function node_announce_preview($id) {
   _node_announce_load_api();
   $ann = node_announce_load($id);
+
   $node = node_announce_next_match($ann);
+  if (!$node) {
+    $node = node_announce_next_match($ann, TRUE);
+  }
+
   return theme('node_announce_preview', $ann, $node);
 }
 

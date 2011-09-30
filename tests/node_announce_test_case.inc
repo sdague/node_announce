@@ -6,6 +6,8 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
    * label attribute on them. It's a bit nicer than the text checking.
    */
 
+  public $format = "Y-m-d H:i";
+
   public function createDateField() {
     $datefield = array (
       'field_name' => 'field_meeting_date',
