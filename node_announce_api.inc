@@ -42,6 +42,19 @@ function node_announce_save(&$announce) {
     }
 }
 
+function node_announce_records_delete_by_nid($nid) {
+  db_query("DELETE FROM {node_announce_records} where nid=%d", $nid);
+}
+
+function node_announce_records_delete_by_aid($aid) {
+  db_query("DELETE FROM {node_announce_records} where aid=%d", $aid);
+}
+
+function node_announce_delete($aid) {
+  node_announce_records_delete_by_aid($aid);
+  db_query("DELETE FROM {node_announce} where id=%d", $aid);
+}
+
 /**
  * This returns a list of date field options
  */

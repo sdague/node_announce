@@ -32,13 +32,24 @@ function node_announce_form_list(&$form_state) {
   return $form;
 }
 
-/**
- * Node add announcements
- */
 
-function node_announce_form($form_state, $aid = NULL) {
-  _node_announce_load_api();
+function node_announce_form_display_delete($form_state, $aid) {
+  $form['id'] = array(
+    '#type' => 'value',
+    '#default_value' => $aid
+  );
+  $form['really_delete'] = array(
+    '#type' => 'submit',
+    '#value' => t('Really Delete?')
+  );
+  $form['cancel'] = array(
+    '#type' => 'submit',
+    '#value' => t('Cancel')
+  );
+  return $form;
+}
 
+function node_announce_load_or_empty($aid) {
   if ($aid) {
     $ann = node_announce_load($aid);
   } else {
@@ -54,7 +65,26 @@ function node_announce_form($form_state, $aid = NULL) {
                          "days_before" => NULL
                          );
   }
+  return $ann;
+}
+/**
+ * Node add announcements
+ */
 
+function node_announce_form($form_state, $aid = NULL) {
+  _node_announce_load_api();
+
+  if (isset($form_state['values']) &&
+    isset($form_state['values']['confirm_delete'])
+    && $aid) {
+    return node_announce_form_display_delete($form_state, $aid);
+  }
+
+  $ann = node_announce_load_or_empty($aid);
+  return node_announce_form_display_addedit($ann);
+}
+
+function node_announce_form_display_addedit($ann) {
   $form['id'] = array(
     '#type' => 'value',
     '#default_value' => $ann->id
@@ -122,7 +152,7 @@ function node_announce_form($form_state, $aid = NULL) {
     );
   }
 
-  if (!$aid) {
+  if (!$ann->id) {
     $form['buttons']['create'] = array(
       '#type' => 'submit',
       '#value' => t('Create')
@@ -141,17 +171,21 @@ function node_announce_form($form_state, $aid = NULL) {
 }
 
 function node_announce_form_validate($form, &$form_state) {
-  if (!$form_state['values']['name']) {
-    form_set_error('name', t('Name can not be blank'));
-  }
-  if (($form_state['values']['days_before'] == 0) || !preg_match("/^\d+$/", $form_state['values']['days_before'])) {
-    form_set_error('days_before', t('Days must be a positive integer'));
-  }
-  if (!valid_email_address($form_state['values']['email_from'])) {
-    form_set_error('email_from', t('Email from must be valid email address'));
-  }
-  if (!valid_email_address($form_state['values']['email_to'])) {
-    form_set_error('email_to', t('Email to must be valid email address'));
+  $op = $form_state['values']['op'];
+
+  if ($op == "Save" || $op == "Create") {
+    if (!$form_state['values']['name']) {
+      form_set_error('name', t('Name can not be blank'));
+    }
+    if (($form_state['values']['days_before'] == 0) || !preg_match("/^\d+$/", $form_state['values']['days_before'])) {
+      form_set_error('days_before', t('Days must be a positive integer'));
+    }
+    if (!valid_email_address($form_state['values']['email_from'])) {
+      form_set_error('email_from', t('Email from must be valid email address'));
+    }
+    if (!valid_email_address($form_state['values']['email_to'])) {
+      form_set_error('email_to', t('Email to must be valid email address'));
+    }
   }
 }
 
@@ -185,8 +219,23 @@ function node_announce_form_submit($form_id, &$form_state) {
       break;
 
     case "Delete":
-      drupal_set_message("Delete not implemented yet");
+      $form_state['values']['confirm_delete'] = TRUE;
+      $form_state['rebuild'] = TRUE;
+      drupal_set_message("Are you sure you want to delete this announcement?");
       break;
+
+    case "Really Delete?":
+      $ann = node_announce_load($obj->id);
+      node_announce_delete($ann->id);
+      $form_state['redirect'] = 'admin/settings/node_announce/list';
+      drupal_set_message("Deleted $ann->name");
+      break;
+
+    case "Cancel":
+      $form_state['redirect'] = 'admin/settings/node_announce/list';
+      drupal_set_message("Delete cancelled");
+      break;
+
   }
 
 
