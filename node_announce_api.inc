@@ -12,11 +12,11 @@
  */
 
 function node_announce_load($id) {
-    if ($id) {
-        return db_fetch_object(db_query("SELECT * from {node_announce} where id = %d", $id));
-    } else {
-        return NULL;
-    }
+  if ($id) {
+    return db_fetch_object(db_query("SELECT * from {node_announce} where id = %d", $id));
+  } else {
+    return NULL;
+  }
 }
 
 
@@ -34,12 +34,12 @@ function node_announce_list() {
  *
  */
 function node_announce_save(&$announce) {
-    $announce_current = node_announce_load($announce->id);
-    if ($announce_current) {
-        return drupal_write_record('node_announce', $announce, 'id');
-    } else {
-        return drupal_write_record('node_announce', $announce);
-    }
+  $announce_current = node_announce_load($announce->id);
+  if ($announce_current) {
+    return drupal_write_record('node_announce', $announce, 'id');
+  } else {
+    return drupal_write_record('node_announce', $announce);
+  }
 }
 
 function node_announce_delete_records_by_nid($nid) {
