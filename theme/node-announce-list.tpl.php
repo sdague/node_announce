@@ -13,6 +13,7 @@
 ?>
 <div class="node-announce-list">
   <table><tr><th>Name</th><th>Days Before</th><th>Date Field</th></tr>
+  <?php $class = ""; ?>
   <?php foreach($announces as $item): ?>
 
   <?php $class = ($class == "node-announce-odd") ? "node-announce-even" : "node-announce-odd"; ?>
@@ -21,8 +22,6 @@
     <td><?php print l($item->name, 'admin/settings/node_announce/' . $item->id); ?></td>
     <td><?php print $item->days_before; ?></td>
     <td><?php print node_announce_date_field_pretty($item->date_field); ?></td>
-
-    <td><?php print l('Edit', 'admin/settings/node_announce/' . $item->id . '/edit'); ?></td>
   </tr>
   <tr class="<?php print $class; ?>">
     <td class="node-announce-subject" colspan="4">Subject: <?php print $item->subject; ?></td>

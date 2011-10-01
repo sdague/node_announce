@@ -220,7 +220,7 @@ function node_announce_form_submit($form_id, &$form_state) {
         drupal_set_message(t('Failed to saved announcment: @name',
             array('@name' => $obj->name)), 'error');
       }
-      $form_state['redirect'] = 'admin/settings/node_announce/list';
+      $form_state['redirect'] = 'admin/settings/node_announce/' . $obj->id;
       break;
 
     case "Delete":

@@ -51,7 +51,7 @@ function node_announce_delete_records_by_aid($aid) {
 }
 
 function node_announce_delete($aid) {
-  node_announce_records_delete_by_aid($aid);
+  node_announce_delete_records_by_aid($aid);
   db_query("DELETE FROM {node_announce} where id=%d", $aid);
 }
 

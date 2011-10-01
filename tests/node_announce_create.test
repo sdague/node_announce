@@ -46,10 +46,12 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
     $this->drupalGet('user');
 
+
     $this->createDateField();
 
     $this->drupalCreateNode(array("title" => "Page 1"));
     $this->drupalCreateNode(array("title" => "Page 2"));
+
 
     $this->drupalCreateNode(array("title" => "Story 1", "type" => "story"));
     $this->drupalCreateNode(array("title" => "Story 2", "type" => "story"));
@@ -124,13 +126,13 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->assertText($name, "Ensure anounce was created");
   }
 
-  public function _checkAnnouncePreview($index) {
+  public function _checkAnnouncePreview($name) {
     $wday = strftime("%A", time() + 20*60*60);
     $month = strftime("%B", time() + 20*60*60);
-    $day = trim(strftime("%e", 20*60*60));
+    $day = trim(strftime("%e", time() + 20*60*60));
 
     $this->drupalGet("admin/settings/node_announce");
-    $this->clickLink("Preview", $index);
+    $this->clickLink($name, 0);
 
     $this->assertText("From: a@b.com", "Ensure from was found");
     $this->assertText("To: a@c.com", "Ensure to was found");
@@ -138,16 +140,25 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->assertRaw("MHVLUG is proud to announce our $month meeting:\n\n<h2>Meeting 2</h2>", "Ensure first part of body is found");
   }
 
-  public function _checkAnnounceEdit($index, $options) {
+  public function _checkAnnounceEdit($name, $options) {
     $this->drupalGet("admin/settings/node_announce");
-    $this->clickLink("Edit", $index);
+    $this->clickLink($name, 0);
+    $this->clickLink("Edit", 0);
 
     $this->drupalPost(NULL, $options, t("Save"));
 
-    $this->clickLink("Edit", $index);
+    $this->clickLink("Edit", 0);
+
     foreach ($options as $key => $value) {
       $this->assertFieldByName($key, $value, "Ensuring $key => $value in updated form");
     }
+    $this->drupalGet("admin/settings/node_announce");
+
+    if (isset($options['name'])) {
+      $this->assertText($options['name']);
+      $this->assertNoText($name);
+    }
+
   }
 
   public function _checkAnnounceList() {
@@ -165,21 +176,17 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->assertText("Announce 4");
   }
 
-  public function _checkAnnounceList3() {
+  public function _checkDelete($name) {
     $this->drupalGet("admin/settings/node_announce");
-    $this->assertNoText("Announce 1");
-    $this->assertNoText("Announce 2");
-    $this->assertText("Announce 3");
-    $this->assertText("Announce 4");
-  }
-
-  public function _checkDelete($index) {
-    $this->drupalGet("admin/settings/node_announce");
-    $this->clickLink("Edit", $index);
+    $this->clickLink($name, 0);
+    $this->clickLink("Edit", 0);
     $this->drupalPost(NULL, array(), t("Delete"));
     $this->assertText("Are you sure you want to delete this announcement?");
     $this->drupalPost(NULL, array(), t("Really Delete?"));
-    $this->assertText("Deleted");
+    $this->assertText("Deleted $name");
+
+    $this->drupalGet("admin/settings/node_announce");
+    $this->assertNoText($name, "Ensure that $name is not found on the page");
   }
 
   public function testBasicCreation() {
@@ -193,16 +200,10 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
     $this->_checkAnnounceList();
 
-    $this->_checkAnnouncePreview(0);
+    $this->_checkAnnouncePreview("Announce 1");
 
-    $this->_checkAnnounceEdit(0, array("name" => "Announce 4", "email_from" => "foo@bar.com"));
+    $this->_checkAnnounceEdit("Announce 1", array("name" => "Announce 4", "email_from" => "foo@bar.com"));
 
-    $this->_checkAnnounceList2();
-
-    $this->_checkDelete(1);
-
-    $this->_checkAnnounceList3();
+    $this->_checkDelete("Announce 2");
   }
-
-
 }
