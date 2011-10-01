@@ -72,7 +72,7 @@ function node_announce_perm() {
 function node_announce_nodeapi(&$node, $op, $a3, $a4) {
   switch($op) {
     case 'delete':
-      node_announce_delete_records($node->nid);
+      node_announce_delete_records_by_nid($node->nid);
       break;
       // TODO: should we indicate that announcements will be sent out to admins?
   }
