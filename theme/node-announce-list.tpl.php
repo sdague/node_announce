@@ -12,15 +12,22 @@
    */
 ?>
 <div class="node-announce-list">
-  <table><tr><th>Name</th><th>Days Before</th><th>Subject</th></tr>
+  <table><tr><th>Name</th><th>Days Before</th><th>Date Field</th></tr>
   <?php foreach($announces as $item): ?>
-  <tr>
-    <td><?php print $item->name; ?></td>
+
+  <?php $class = ($class == "node-announce-odd") ? "node-announce-even" : "node-announce-odd"; ?>
+
+  <tr class="<?php print $class; ?>" >
+    <td><?php print l($item->name, 'admin/settings/node_announce/' . $item->id); ?></td>
     <td><?php print $item->days_before; ?></td>
-    <td><?php print $item->subject; ?></td>
-    <td><?php print l('Preview', 'admin/settings/node_announce/' . $item->id . '/preview'); ?></td>
+    <td><?php print node_announce_date_field_pretty($item->date_field); ?></td>
+
     <td><?php print l('Edit', 'admin/settings/node_announce/' . $item->id . '/edit'); ?></td>
   </tr>
+  <tr class="<?php print $class; ?>">
+    <td class="node-announce-subject" colspan="4">Subject: <?php print $item->subject; ?></td>
+  </tr>
+
   <?php endforeach; ?>
   </table>
 </div>

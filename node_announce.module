@@ -36,28 +36,41 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
+
   $items['admin/settings/node_announce/%/edit'] = array(
-    'type' => MENU_CALLBACK,
-    'title callback' => 'node_announce_title_edit',
-    'title arguments' => array(3),
+    'type' => MENU_LOCAL_TASK,
+    'title' => 'Edit',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form', 3),
     'access arguments' => array('administer node announcements'),
     'file' => 'node_announce.admin.inc',
   );
 
-
-  $items['admin/settings/node_announce/%/preview'] = array(
-    'type' => MENU_CALLBACK,
-    'title' => 'Preview Annonucement',
+  $items['admin/settings/node_announce/%'] = array(
+    'title' => 'Preview Announcement',
     'page callback' => 'node_announce_preview',
     'page arguments' => array(3),
     'access arguments' => array('administer node announcements'),
     'file' => 'node_announce.admin.inc',
   );
+
+  $items['admin/settings/node_announce/%/preview'] = array(
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'title' => 'Preview',
+    'page callback' => 'node_announce_preview',
+    'page arguments' => array(3),
+    'access arguments' => array('administer node announcements'),
+    'file' => 'node_announce.admin.inc',
+    'weight' => -1
+  );
+
   return $items;
 }
 
+function node_announce_init() {
+  drupal_add_css(drupal_get_path('module', 'node_announce') .'/css/node_announce.css');
+  _node_announce_load_api();
+}
 
 /**
  * Implementation of hook_perm()
@@ -85,7 +98,6 @@ function node_announce_nodeapi(&$node, $op, $a3, $a4) {
  *  Go through all the announcements and set
  */
 function node_announce_cron() {
-  _node_announce_load_api();
   node_announce_process();
 }
 

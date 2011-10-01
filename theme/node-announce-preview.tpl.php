@@ -11,10 +11,14 @@
    *
    */
 ?>
-<div class="node-announce-preview">
+<p>
+  Below is a preview of what the next email sent out on this announcement will be, to give you a feel of what it will look like. If you don't like some aspect of it, now is the time to change it.
+</p>
+<div id="node-announce-preview">
 
   <div id="node-announce-preview-from">From: <?php print $announce->email_from; ?></div>
   <div id="node-announce-preview-to">To: <?php print $announce->email_to; ?></div>
   <div id="node-announce-preview-subject">Subject: <?php print token_replace($announce->subject, 'node', $node); ?></div>
+  <hr>
 <div id="node-announce-preview-body"><?php print token_replace($announce->message, 'node', $node); ?></div>
 </div>

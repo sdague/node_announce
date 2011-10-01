@@ -1,0 +1,33 @@
+
+/****
+   * Support spacing for the list of announcements
+   */
+
+.node-announce-list .node-announce-odd {
+    background-color: #eeeeee;
+}
+
+.node-announce-list td {
+    padding: 3px;
+}
+
+.node-announce-list .node-announce-subject {
+    padding-left: 20px;
+}
+
+/****
+   * Make email look like you expect
+   */
+
+#node-announce-preview {
+    padding: 10px;
+    background-color: #eee;
+    border: 1px solid #ddd;
+}
+
+#node-announce-preview hr {
+    color: #aaa;
+    background-color: #aaa;
+    border: none;
+    height: 1px;
+}
