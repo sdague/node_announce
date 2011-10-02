@@ -5,6 +5,7 @@
 
 .node-announce-list .node-announce-odd {
     background-color: #eeeeee;
+    color: black;
 }
 
 .node-announce-list td {
