@@ -153,6 +153,7 @@ function node_announce_load_records($aid) {
   $records = array();
   while($record = db_fetch_object($r)) {
     $record->node = node_load($record->nid);
+    $record->url = url(drupal_get_path_alias('node/' . $record->nid), array('absolute' => TRUE));
     $records[] = $record;
   }
   return $records;

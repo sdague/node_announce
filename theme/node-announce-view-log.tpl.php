@@ -22,7 +22,7 @@
   <?php $class = ($class == "node-announce-odd") ? "node-announce-even" : "node-announce-odd"; ?>
 
   <tr class="<?php print $class; ?>" >
-    <td><?php print l($item->node->title, $item->node->url); ?></td>
+    <td><?php print l($item->node->title, $item->url); ?></td>
     <td><?php print $item->last_sent; ?></td>
   </tr>
 

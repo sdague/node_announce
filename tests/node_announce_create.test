@@ -17,7 +17,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     return array(
       'name' => 'Node Announce Basic Test',
       'description' => 'Ensure that node_announce has minimal functionality for release',
-      'group' => 'NodeAnnounce',
+      'group' => 'NodeAnnounce'
     );
   }
 
@@ -26,7 +26,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
    */
   public function setUp() {
     // Enable any modules required for the test.
-    parent::setUp('content', 'date_api', 'date_repeat', 'date', 'node_announce', 'token');
+    parent::setUp('content', 'date_api', 'date_repeat', 'date', 'token', 'node_announce');
 
     // Create and log in our privileged user.
     $privs = array(

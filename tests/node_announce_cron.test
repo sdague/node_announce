@@ -17,7 +17,7 @@ class NodeAnnounceCronTestCase extends NodeAnnounceTestCase {
     return array(
       'name' => 'Node Announce Cron Test',
       'description' => 'Ensure that node_announce sends emails correctly',
-      'group' => 'NodeAnnounce',
+      'group' => 'NodeAnnounce'
     );
   }
 
@@ -71,19 +71,44 @@ class NodeAnnounceCronTestCase extends NodeAnnounceTestCase {
         "name" => "Meeting Announce 1",
         "email_from" => "sean@dague.net",
         "email_to" => "sean@dague.net",
-        "subject" => "This is a test",
+        "subject" => "[ANNOUNCE] [title]",
         "message" => "Test message one",
         "days_before" => "5",
         "date_field" => "meeting:field_meeting_date"
       ));
+
+    $this->CreateAnnounce(array(
+        "name" => "Meeting Announce 2",
+        "email_from" => "sean@dague.net",
+        "email_to" => "sean@dague.net",
+        "subject" => "[ANNOUNCE] [title]",
+        "message" => "Test message two",
+        "days_before" => "9",
+        "date_field" => "meeting:field_meeting_date"
+      ));
+
   }
 
-  public function testCronSend() {
+  public function _checkCronSend() {
     $this->cronRun();
 
     $this->assertMail("to", "sean@dague.net", "Testing for email name");
     $this->assertMail("from", "sean@dague.net", "Testing for email from");
     $this->assertMail("body", "Test message one\n", "Testing for email message");
-    $this->assertMail("subject", "This is a test\n", "Testing for email subject");
+    $this->assertMail("subject", "[ANNOUNCE] Meeting 1\n", "Testing for email subject");
+  }
+
+  public function _checkLog() {
+    $this->drupalGet("admin/settings/node_announce");
+    $this->clickLink("Meeting Announce 1");
+    $this->clickLink("Log");
+    $this->assertText("Meeting 1");
+  }
+
+
+
+  public function testCronSend() {
+    $this->_checkCronSend();
+    $this->_checkLog();
   }
 }
