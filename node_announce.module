@@ -46,6 +46,15 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
+  $items['admin/settings/node_announce/%/log'] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => 'Log',
+    'page callback' => 'node_announce_view_log',
+    'page arguments' => array(3),
+    'access arguments' => array('administer node announcements'),
+    'file' => 'node_announce.admin.inc',
+  );
+
   $items['admin/settings/node_announce/%'] = array(
     'title' => 'Preview Announcement',
     'page callback' => 'node_announce_preview',
@@ -124,6 +133,10 @@ function node_announce_theme() {
     'node_announce_preview' => $base + array(
       'template' => 'node-announce-preview',
       'arguments' => array('announce' => NULL, 'node' => NULL)
+    ),
+    'node_announce_view_log' => $base + array(
+      'template' => 'node-announce-view-log',
+      'arguments' => array('announce' => NULL, 'records' => array())
     ),
   );
   return $themes;

@@ -1,10 +1,19 @@
 <?php
 
 /**
+ * the log for the items
+ */
+function node_announce_view_log($id) {
+  $ann = node_announce_load($id);
+  $records = node_announce_load_records($id);
+  return theme('node_announce_view_log', $ann, $records);
+}
+
+
+/**
  * the page callback for the preview function.
  */
 function node_announce_preview($id) {
-  _node_announce_load_api();
   $ann = node_announce_load($id);
 
   $node = node_announce_next_match($ann);

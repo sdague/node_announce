@@ -76,7 +76,6 @@ function node_announce_date_field_pretty($field) {
   return $fields[$field];
 }
 
-
 /**
  *
  * QUERY that we are looking for
@@ -147,6 +146,16 @@ function node_announce_already_announced($ann, $node) {
   } else {
     return NULL;
   }
+}
+
+function node_announce_load_records($aid) {
+  $r = db_query("SELECT * FROM {node_announce_records} where aid=%d ORDER by last_sent DESC", $aid);
+  $records = array();
+  while($record = db_fetch_object($r)) {
+    $record->node = node_load($record->nid);
+    $records[] = $record;
+  }
+  return $records;
 }
 
 function node_announce_record_send($aid, $nid) {
