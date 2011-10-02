@@ -24,6 +24,7 @@
     padding: 10px;
     background-color: #eee;
     border: 1px solid #ddd;
+    color: black;
 }
 
 #node-announce-preview hr {
