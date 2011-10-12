@@ -12,7 +12,7 @@
  */
 function node_announce_menu() {
   $items = array();
-  $items['admin/settings/node_announce'] = array(
+  $items['admin/build/node_announce'] = array(
     'title' => t('Node Announcements'),
     'description' => t('Configure node announcements'),
     'page callback' => 'drupal_get_form',
@@ -21,13 +21,13 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
-  $items['admin/settings/node_announce/list'] = array(
+  $items['admin/build/node_announce/list'] = array(
     'title' => t('List'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -1,
   );
 
-  $items['admin/settings/node_announce/add'] = array(
+  $items['admin/build/node_announce/add'] = array(
     'title' => 'Add Announcement',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form'),
@@ -37,7 +37,7 @@ function node_announce_menu() {
   );
 
 
-  $items['admin/settings/node_announce/%/edit'] = array(
+  $items['admin/build/node_announce/%/edit'] = array(
     'type' => MENU_LOCAL_TASK,
     'title' => 'Edit',
     'page callback' => 'drupal_get_form',
@@ -46,7 +46,7 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
-  $items['admin/settings/node_announce/%/log'] = array(
+  $items['admin/build/node_announce/%/log'] = array(
     'type' => MENU_LOCAL_TASK,
     'title' => 'Log',
     'page callback' => 'node_announce_view_log',
@@ -55,7 +55,7 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
-  $items['admin/settings/node_announce/%'] = array(
+  $items['admin/build/node_announce/%'] = array(
     'title' => 'Preview Announcement',
     'page callback' => 'node_announce_preview',
     'page arguments' => array(3),
@@ -63,7 +63,7 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
-  $items['admin/settings/node_announce/%/preview'] = array(
+  $items['admin/build/node_announce/%/preview'] = array(
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'title' => 'Preview',
     'page callback' => 'node_announce_preview',

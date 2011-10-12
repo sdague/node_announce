@@ -218,7 +218,7 @@ function node_announce_form_submit($form_id, &$form_state) {
         drupal_set_message(t('Failed to create announcment: @name',
             array('@name' => $obj->name)), 'error');
       }
-      $form_state['redirect'] = 'admin/settings/node_announce/list';
+      $form_state['redirect'] = 'admin/build/node_announce/list';
       break;
 
     case "Save":
@@ -229,7 +229,7 @@ function node_announce_form_submit($form_id, &$form_state) {
         drupal_set_message(t('Failed to saved announcment: @name',
             array('@name' => $obj->name)), 'error');
       }
-      $form_state['redirect'] = 'admin/settings/node_announce/' . $obj->id;
+      $form_state['redirect'] = 'admin/build/node_announce/' . $obj->id;
       break;
 
     case "Delete":
@@ -241,12 +241,12 @@ function node_announce_form_submit($form_id, &$form_state) {
     case "Really Delete?":
       $ann = node_announce_load($obj->id);
       node_announce_delete($ann->id);
-      $form_state['redirect'] = 'admin/settings/node_announce/list';
+      $form_state['redirect'] = 'admin/build/node_announce/list';
       drupal_set_message("Deleted $ann->name");
       break;
 
     case "Cancel":
-      $form_state['redirect'] = 'admin/settings/node_announce/list';
+      $form_state['redirect'] = 'admin/build/node_announce/list';
       drupal_set_message("Delete cancelled");
       break;
 

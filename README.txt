@@ -29,7 +29,7 @@ drupal internal features.
 ** USAGE **
 
 Once you have installed Node Announce you will need to create a new
-announcement (admin/settings/node_announce/add).
+announcement (admin/build/node_announce/add).
 
 You will then be creating an announcement for a Content Type, based on
 a specific Date field that it has. The days before field is used to
