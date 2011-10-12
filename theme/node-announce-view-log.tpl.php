@@ -23,7 +23,7 @@
 
   <tr class="<?php print $class; ?>" >
     <td><?php print l($item->node->title, $item->url); ?></td>
-    <td><?php print $item->last_sent; ?></td>
+    <td><?php print $item->when; ?></td>
   </tr>
 
   <?php endforeach; ?>

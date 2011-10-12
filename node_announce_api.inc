@@ -154,6 +154,7 @@ function node_announce_load_records($aid) {
   while($record = db_fetch_object($r)) {
     $record->node = node_load($record->nid);
     $record->url = url(drupal_get_path_alias('node/' . $record->nid), array('absolute' => TRUE));
+    $record->when = format_date($record->last_sent);
     $records[] = $record;
   }
   return $records;
