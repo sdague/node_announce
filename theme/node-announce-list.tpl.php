@@ -19,7 +19,7 @@
   <?php $class = ($class == "node-announce-odd") ? "node-announce-even" : "node-announce-odd"; ?>
 
   <tr class="<?php print $class; ?>" >
-    <td><?php print l($item->name, 'admin/settings/node_announce/' . $item->id); ?></td>
+    <td><?php print l($item->name, 'admin/build/node_announce/' . $item->id); ?></td>
     <td><?php print $item->days_before; ?></td>
     <td><?php print node_announce_date_field_pretty($item->date_field); ?></td>
   </tr>

@@ -99,7 +99,7 @@ class NodeAnnounceCronTestCase extends NodeAnnounceTestCase {
   }
 
   public function _checkLog() {
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
     $this->clickLink("Meeting Announce 1");
     $this->clickLink("Log");
     $this->assertText("Meeting 1");

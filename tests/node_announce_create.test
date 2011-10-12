@@ -75,7 +75,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
   }
 
   public function _checkAnnounceForm() {
-    $this->drupalGet("admin/settings/node_announce/add");
+    $this->drupalGet("admin/build/node_announce/add");
     $this->assertFieldById("edit-name", "", "Name field exists");
     $this->assertFieldById("edit-days-before", "", "Day's before exists");
     $this->assertFieldById("edit-email-to", "", "Check for Email to");
@@ -86,7 +86,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
   }
 
   public function _checkFormValidation() {
-    $this->drupalGet("admin/settings/node_announce/add");
+    $this->drupalGet("admin/build/node_announce/add");
     $this->drupalPost(NULL, array(), t("Create"));
 
     $this->assertText("Name can not be blank");
@@ -110,7 +110,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
   }
 
   public function _checkAnnounceCreate($name, $days) {
-    $this->drupalGet("admin/settings/node_announce/add");
+    $this->drupalGet("admin/build/node_announce/add");
     $this->CreateAnnounce(array(
         "name" => $name,
         "days_before" => $days,
@@ -122,7 +122,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
 <h2>[title]</h2>"
       ));
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
     $this->assertText($name, "Ensure anounce was created");
   }
 
@@ -131,7 +131,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $month = strftime("%B", time() + 20*60*60);
     $day = trim(strftime("%e", time() + 20*60*60));
 
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
     $this->clickLink($name, 0);
 
     $this->assertText("From: a@b.com", "Ensure from was found");
@@ -141,7 +141,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
   }
 
   public function _checkAnnounceEdit($name, $options) {
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
     $this->clickLink($name, 0);
     $this->clickLink("Edit", 0);
 
@@ -152,7 +152,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     foreach ($options as $key => $value) {
       $this->assertFieldByName($key, $value, "Ensuring $key => $value in updated form");
     }
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
 
     if (isset($options['name'])) {
       $this->assertText($options['name']);
@@ -162,14 +162,14 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
   }
 
   public function _checkAnnounceList() {
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
     $this->assertText("Announce 1");
     $this->assertText("Announce 2");
     $this->assertText("Announce 3");
   }
 
   public function _checkAnnounceList2() {
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
     $this->assertNoText("Announce 1");
     $this->assertText("Announce 2");
     $this->assertText("Announce 3");
@@ -177,7 +177,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
   }
 
   public function _checkDelete($name) {
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
     $this->clickLink($name, 0);
     $this->clickLink("Edit", 0);
     $this->drupalPost(NULL, array(), t("Delete"));
@@ -185,7 +185,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->drupalPost(NULL, array(), t("Really Delete?"));
     $this->assertText("Deleted $name");
 
-    $this->drupalGet("admin/settings/node_announce");
+    $this->drupalGet("admin/build/node_announce");
     $this->assertNoText($name, "Ensure that $name is not found on the page");
   }
 

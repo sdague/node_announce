@@ -144,7 +144,7 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
   }
 
   public function CreateAnnounce($options) {
-    $this->drupalGet('admin/settings/node_announce/add');
+    $this->drupalGet('admin/build/node_announce/add');
     $this->drupalPost(NULL, $options, t('Create'));
   }
 
