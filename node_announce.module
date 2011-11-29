@@ -74,7 +74,7 @@ function node_announce_menu() {
   );
 
   $items['admin/build/node_announce/%/send'] = array(
-    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'type' => MENU_LOCAL_TASK,
     'title' => 'Send',
     'page callback' => 'node_announce_send',
     'page arguments' => array(3),
