@@ -25,6 +25,23 @@ function node_announce_preview($id) {
 }
 
 /**
+ * send a node announcement
+ */
+function node_announce_send($id) {
+  $ann = node_announce_load($id);
+
+  $node = node_announce_next_match($ann);
+  if (!$node) {
+    $node = node_announce_next_match($ann, TRUE);
+  }
+  node_announce_send_announce($ann, $node);
+  drupal_set_message("Sent announcement");
+
+  return theme('node_announce_preview', $ann, $node);
+
+}
+
+/**
  * @file
  * This provides the admin interface for node_announce
  */
