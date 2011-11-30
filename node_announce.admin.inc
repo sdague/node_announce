@@ -37,8 +37,7 @@ function node_announce_send($id) {
   node_announce_send_announce($ann, $node);
   drupal_set_message("Sent announcement");
 
-  return theme('node_announce_preview', $ann, $node);
-
+  drupal_goto("admin/build/node_announce/$id");
 }
 
 /**
