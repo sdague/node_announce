@@ -194,7 +194,9 @@ function node_announce_send_announce($ann, $node) {
       token_replace($ann->subject, 'node', $node),
       token_replace($ann->message, 'node', $node),
       NULL, /* plain text only */
-      array(),  /* additional headers */
+      array(
+        'From' => $ann->email_from,
+        'Sender' => $ann->email_from),
       NULL, /* custom plain text */
       array(), /* attachments .... maybe put ical here later? */
       'node_announce'
