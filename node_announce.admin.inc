@@ -88,6 +88,7 @@ function node_announce_load_or_empty($aid) {
                          "id" => NULL,
                          "name" => NULL,
                          "date_field" => NULL,
+                         "email_key" => NULL,
                          "email_to" => NULL,
                          "email_from" => NULL,
                          "message" => NULL,
@@ -140,6 +141,13 @@ function node_announce_form_display_addedit($ann) {
     '#type' => 'textfield',
     '#default_value' => $ann->days_before,
     '#description' => t('Number of Days prior to event to send announce'),
+  );
+
+  $form['email_key'] = array(
+    '#title' => t('Email Key'),
+    '#type' => 'textfield',
+    '#default_value' => $ann->email_key,
+    '#description' => t('If you are using mimemail, setting an email key will let you use different templates per announce. Leave blank otherwise')
   );
 
   $form['email_from'] = array(
@@ -209,6 +217,9 @@ function node_announce_form_validate($form, &$form_state) {
     }
     if (($form_state['values']['days_before'] == 0) || !preg_match("/^\d+$/", $form_state['values']['days_before'])) {
       form_set_error('days_before', t('Days must be a positive integer'));
+    }
+    if ($form_state['values']['email_key'] != "" && !preg_match("/^[\w-]+$/", $form_state['values']['email_key'])) {
+      form_set_error('email_key', t('Email key can only contain letters, numbers, dashes, and underscores'));
     }
     if (!valid_email_address($form_state['values']['email_from'])) {
       form_set_error('email_from', t('Email from must be valid email address'));

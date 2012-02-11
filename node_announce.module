@@ -187,6 +187,8 @@ function node_announce_process() {
  */
 
 function node_announce_send_announce($ann, $node) {
+  $key = $ann->email_key || 'node_announce';
+
   if (module_exists('mimemail')) {
     $result = mimemail(
       $ann->email_from,
@@ -199,11 +201,11 @@ function node_announce_send_announce($ann, $node) {
         'Sender' => $ann->email_from),
       NULL, /* custom plain text */
       array(), /* attachments .... maybe put ical here later? */
-      'node_announce'
+      $key
     );
   } else {
     $params = array('announce' => $ann, 'node' => $node);
-    $result = drupal_mail('node_announce', 'node_announce', $ann->email_to, language_default(), $params);
+    $result = drupal_mail('node_announce', $key, $ann->email_to, language_default(), $params);
   }
 
 }
