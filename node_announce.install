@@ -27,7 +27,7 @@ function node_announce_schema() {
     'fields' => array(
       'id' => array('type' => 'serial', 'not null' => TRUE),
       'name' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
-      'email_key', array('type' => 'varchar', 'length' => 255),
+      'email_token' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
       'email_from' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
       'email_to' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
       'days_before' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
@@ -53,6 +53,6 @@ function node_announce_schema() {
 
 function node_announce_update_6001() {
   $ret = array();
-  db_add_field($ret, 'node_announce', 'email_key', array('type' => 'varchar', 'length' => 255));
+  db_add_field($ret, 'node_announce', 'email_token', array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''));
   return $ret;
 }

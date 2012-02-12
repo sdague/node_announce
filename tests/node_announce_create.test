@@ -114,6 +114,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->CreateAnnounce(array(
         "name" => $name,
         "days_before" => $days,
+        "email_token" => "key",
         "email_from" => "a@b.com",
         "email_to" => "a@c.com",
         "date_field" => "meeting:field_meeting_date",
@@ -202,7 +203,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
     $this->_checkAnnouncePreview("Announce 1");
 
-    $this->_checkAnnounceEdit("Announce 1", array("name" => "Announce 4", "email_from" => "foo@bar.com"));
+    $this->_checkAnnounceEdit("Announce 1", array("name" => "Announce 4", "email_from" => "foo@bar.com", "email_token" => "key"));
 
     $this->_checkDelete("Announce 2");
   }
