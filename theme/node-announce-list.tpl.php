@@ -13,6 +13,8 @@
 ?>
 <div class="node-announce-list">
   <table><tr><th>Name</th><th>Days Before</th><th>Date Field</th></tr>
+
+
   <?php $class = ""; ?>
   <?php foreach($announces as $item): ?>
 

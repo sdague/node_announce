@@ -45,18 +45,20 @@ function node_announce_send($id) {
  * This provides the admin interface for node_announce
  */
 
-function node_announce_form_list(&$form_state) {
+function node_announce_form_list($form_state) {
   _node_announce_load_api();
 
   $form = array();
   $form['introduction'] = array(
-    '#value' => t('Below are a list of active announcements.')
+    '#markup' => t('Below are a list of active announcements.')
   );
 
   $announces = node_announce_list();
 
   $form['content'] = array(
-    '#value' => theme('node_announce_list', $announces)
+    '#markup' => theme('node_announce_list',
+              array('announces' => $announces)
+    )
   );
 
   return $form;

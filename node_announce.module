@@ -12,22 +12,22 @@
  */
 function node_announce_menu() {
   $items = array();
-  $items['admin/build/node_announce'] = array(
-    'title' => t('Node Announcements'),
-    'description' => t('Configure node announcements'),
+  $items['admin/config/system/node_announce'] = array(
+    'title' => 'Node Announcements',
+    'description' => 'Configure node announcements',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form_list'),
     'access arguments' => array('administer node announcements'),
     'file' => 'node_announce.admin.inc',
   );
 
-  $items['admin/build/node_announce/list'] = array(
-    'title' => t('List'),
+  $items['admin/config/system/node_announce/list'] = array(
+    'title' => 'List',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -1,
   );
 
-  $items['admin/build/node_announce/add'] = array(
+  $items['admin/config/system/node_announce/add'] = array(
     'title' => 'Add Announcement',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('node_announce_form'),
@@ -37,7 +37,7 @@ function node_announce_menu() {
   );
 
 
-  $items['admin/build/node_announce/%/edit'] = array(
+  $items['admin/config/system/node_announce/%/edit'] = array(
     'type' => MENU_LOCAL_TASK,
     'title' => 'Edit',
     'page callback' => 'drupal_get_form',
@@ -46,7 +46,7 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
-  $items['admin/build/node_announce/%/log'] = array(
+  $items['admin/config/system/node_announce/%/log'] = array(
     'type' => MENU_LOCAL_TASK,
     'title' => 'Log',
     'page callback' => 'node_announce_view_log',
@@ -55,7 +55,7 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
-  $items['admin/build/node_announce/%'] = array(
+  $items['admin/config/system/node_announce/%'] = array(
     'title' => 'Preview Announcement',
     'page callback' => 'node_announce_preview',
     'page arguments' => array(3),
@@ -63,7 +63,7 @@ function node_announce_menu() {
     'file' => 'node_announce.admin.inc',
   );
 
-  $items['admin/build/node_announce/%/preview'] = array(
+  $items['admin/config/system/node_announce/%/preview'] = array(
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'title' => 'Preview',
     'page callback' => 'node_announce_preview',
@@ -73,7 +73,7 @@ function node_announce_menu() {
     'weight' => -1
   );
 
-  $items['admin/build/node_announce/%/send'] = array(
+  $items['admin/config/system/node_announce/%/send'] = array(
     'type' => MENU_LOCAL_TASK,
     'title' => 'Send',
     'page callback' => 'node_announce_send',
@@ -128,9 +128,8 @@ function _node_announce_load_api() {
 }
 
 function node_announce_theme() {
-  $path = drupal_get_path('module', 'node_announce');
   $base = array(
-    'path' => "$path/theme"
+    'path' => drupal_get_path('module', 'node_announce') . "/theme"
   );
 
   // TODO: get forms in here as well, though I was having an issue getting
@@ -138,15 +137,15 @@ function node_announce_theme() {
   $themes = array(
     'node_announce_list' => $base + array(
       'template' => 'node-announce-list',
-      'arguments' => array('announces' => array())
+      'variables' => array('announces' => array())
     ),
     'node_announce_preview' => $base + array(
       'template' => 'node-announce-preview',
-      'arguments' => array('announce' => NULL, 'node' => NULL)
+      'variables' => array('announce' => NULL, 'node' => NULL)
     ),
     'node_announce_view_log' => $base + array(
       'template' => 'node-announce-view-log',
-      'arguments' => array('announce' => NULL, 'records' => array())
+      'variables' => array('announce' => NULL, 'records' => array())
     ),
   );
   return $themes;

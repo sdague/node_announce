@@ -5,20 +5,6 @@
  */
 
 /**
- *  Implementation of hook_install()
- */
-function node_announce_install() {
-  drupal_install_schema('node_announce');
-}
-
-/**
- *  Implementation of hook_uninstall()
- */
-function node_announce_uninstall() {
-  drupal_uninstall_schema('node_announce');
-}
-
-/**
  *  Implementation of hook_schema()
  */
 function node_announce_schema() {

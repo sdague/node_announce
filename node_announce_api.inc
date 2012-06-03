@@ -13,7 +13,10 @@
 
 function node_announce_load($id) {
   if ($id) {
-    return db_fetch_object(db_query("SELECT * from {node_announce} where id = %d", $id));
+    return db_select('node_announce', 'na')
+      ->fields('na')
+      ->condition('na.id', $id)
+      ->execute();
   } else {
     return NULL;
   }
@@ -22,11 +25,23 @@ function node_announce_load($id) {
 
 function node_announce_list() {
   $results = array();
-  $r = db_query("SELECT * from {node_announce} ORDER BY date_field, days_before");
-  while($obj = db_fetch_object($r)) {
+  $r = db_select('node_announce', 'na')
+    ->fields('na')
+    ->orderBy('date_field')
+    ->orderBy('days_before')
+    ->execute();
+
+  foreach ($r as $obj) {
     $results[] = $obj;
   }
+
   return $results;
+
+  /* $r = db_query("SELECT * from {node_announce} ORDER BY date_field, days_before"); */
+  /* while($obj = db_fetch_object($r)) { */
+  /*   $results[] = $obj; */
+  /* } */
+  /* return $results; */
 }
 
 /**
@@ -43,16 +58,25 @@ function node_announce_save(&$announce) {
 }
 
 function node_announce_delete_records_by_nid($nid) {
-  db_query("DELETE FROM {node_announce_records} where nid=%d", $nid);
+  # db_query("DELETE FROM {node_announce_records} where nid=%d", $nid);
+  db_delete('node_announce_records')
+    ->condition('nid', $nid)
+    ->execute();
 }
 
 function node_announce_delete_records_by_aid($aid) {
-  db_query("DELETE FROM {node_announce_records} where aid=%d", $aid);
+  # db_query("DELETE FROM {node_announce_records} where aid=%d", $aid);
+  db_delete('node_announce_records')
+    ->condition('aid', $aid)
+    ->execute();
 }
 
 function node_announce_delete($aid) {
   node_announce_delete_records_by_aid($aid);
-  db_query("DELETE FROM {node_announce} where id=%d", $aid);
+  # db_query("DELETE FROM {node_announce} where id=%d", $aid);
+  db_delete('node_announce')
+    ->condition('id', $aid)
+    ->execute();
 }
 
 /**
