@@ -104,7 +104,12 @@ function node_announce_load_or_empty($aid) {
  * Node add announcements
  */
 
-function node_announce_form($form_state, $aid = NULL) {
+function node_announce_form($form, $form_state) {
+  $aid = 0;
+  if (array_key_exists('aid', $form_state['build_info']['args'])) {
+    $aid = $form_state['build_info']['args']['aid'];
+  }
+  error_log("Form " . print_r($aid, TRUE));
   _node_announce_load_api();
 
   if (isset($form_state['values']) &&
@@ -188,23 +193,23 @@ function node_announce_form_display_addedit($ann) {
     );
 
     $form['view']['token_help']['help'] = array(
-      '#value' => theme('token_help', 'node'),
+      '#markup' => theme('token_help', 'node'),
     );
   }
 
   if (!$ann->id) {
     $form['buttons']['create'] = array(
       '#type' => 'submit',
-      '#value' => t('Create')
+      '#markup' => t('Create')
     );
   } else {
     $form['buttons']['save'] = array(
       '#type' => 'submit',
-      '#value' => t('Save')
+      '#markup' => t('Save')
     );
     $form['buttons']['delete'] = array(
       '#type' => 'submit',
-      '#value' => t('Delete')
+      '#markup' => t('Delete')
     );
   }
   return $form;

@@ -15,8 +15,9 @@ function node_announce_load($id) {
   if ($id) {
     return db_select('node_announce', 'na')
       ->fields('na')
-      ->condition('na.id', $id)
-      ->execute();
+      ->condition('id', $id, '=')
+      ->execute()
+      ->fetchObject();
   } else {
     return NULL;
   }
@@ -36,12 +37,6 @@ function node_announce_list() {
   }
 
   return $results;
-
-  /* $r = db_query("SELECT * from {node_announce} ORDER BY date_field, days_before"); */
-  /* while($obj = db_fetch_object($r)) { */
-  /*   $results[] = $obj; */
-  /* } */
-  /* return $results; */
 }
 
 /**
@@ -85,9 +80,20 @@ function node_announce_delete($aid) {
 
 function node_announce_date_field_options() {
   $fields = array();
-  $results = db_query("SELECT c.type_name, c.field_name, c.label, n.name from {content_node_field_instance} c INNER JOIN {node_type} n ON c.type_name=n.type where c.widget_module='date' ORDER BY n.name, c.label");
-  while($obj = db_fetch_object($results)) {
-    $fields[$obj->type_name . ":" . $obj->field_name] = $obj->name . " - " . $obj->label;
+
+  $query = db_select('node_type', 'n');
+  $query->join('field_config_instance', 'fci', 'fci.bundle=n.type');
+  $query->join('field_config', 'fc', 'fci.field_id=fc.id');
+
+  $results = $query->fields('n', array('name', 'type'))
+    ->fields('fc', array('field_name'))
+    ->fields('fci', array('data'))
+    ->condition('fc.module', 'date')
+    ->execute();
+
+  // TODO: get the field label out of the fci.data
+  foreach ($results as $obj) {
+    $fields[$obj->type . ":" . $obj->field_name] = $obj->name . " - " . $obj->field_name;
   }
   return $fields;
 }
@@ -119,18 +125,30 @@ function node_announce_next_match($ann, $before = FALSE) {
   $field = $array[1];
   $fv = $field . "_value";
 
-  if (!$before) {
-    $clause = "> NOW() ORDER BY c.$fv ASC";
-  } else {
-    $clause = "< NOW() ORDER BY c.$fv DESC";
-  }
+  /*  if (!$before) { */
+  /*   $clause = "> NOW() ORDER BY c.$fv ASC"; */
+  /* } else { */
+  /*   $clause = "< NOW() ORDER BY c.$fv DESC"; */
+  /* } */
 
-  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv $clause", $type);
-  $nid = db_fetch_object($r);
-  if (!$nid) {
+  /* $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv $clause", $type); */
+
+  $query = db_select('field_data_' . $field, 'f');
+  $query->join('node', 'n', 'n.nid = f.entity_id');
+  $query->fields('n', 'nid')->condition('n.type', $type);
+
+  if (!$before) {
+    $query->condition('f.' . $fv, 'NOW()', '>')
+      ->orderBy('f.' . $fv, 'ASC');
+  } else {
+    $query->condition('f.' . $fv, 'NOW()', '<')
+      ->orderBy('f.' . $fv, 'DESC');
+  }
+  $obj = $query->execute()->fetchObject();
+  if (!$obj) {
     return NULL;
   }
-  $node = node_load($nid->nid);
+  $node = node_load($obj->nid);
   return $node;
 }
 
@@ -164,18 +182,29 @@ function node_announce_applicable_nodes($ann) {
  */
 
 function node_announce_already_announced($ann, $node) {
-  $row = db_fetch_object(db_query("SELECT last_sent from {node_announce_records} n WHERE n.nid=%d and n.aid=%d", $node->nid, $ann->id));
-  if ($row) {
-    return $row->last_sent;
+  $obj = db_select("node_announce_records", "n")
+    ->fields('n', array('last_sent'))
+    ->condition("nid", $node->nid)
+    ->condition("aid", $ann->id)
+    ->execute()
+    ->fetchObject();
+  #  $row = db_fetch_object(db_query("SELECT last_sent from {node_announce_records} n WHERE n.nid=%d and n.aid=%d", $node->nid, $ann->id));
+  if ($obj) {
+    return $obj->last_sent;
   } else {
     return NULL;
   }
 }
 
 function node_announce_load_records($aid) {
-  $r = db_query("SELECT * FROM {node_announce_records} where aid=%d ORDER by last_sent DESC", $aid);
+  $result = db_select("node_announce_records", "n")
+    ->fields('n')
+    ->condition('aid', $aid)
+    ->orderBy('last_sent', 'DESC')
+    ->execute();
+  # $r = db_query("SELECT * FROM {node_announce_records} where aid=%d ORDER by last_sent DESC", $aid);
   $records = array();
-  while($record = db_fetch_object($r)) {
+  foreach ($result as $record) {
     $record->node = node_load($record->nid);
     $record->url = url(drupal_get_path_alias('node/' . $record->nid), array('absolute' => TRUE));
     $record->when = format_date($record->last_sent);

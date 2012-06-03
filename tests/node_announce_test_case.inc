@@ -9,6 +9,8 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
   public $format = "Y-m-d H:i";
 
   public function createDateField() {
+    # TODO: update to drupal 7 version... which is going to take a while
+
     $datefield = array (
       'field_name' => 'field_meeting_date',
       'type_name' => 'meeting',
@@ -144,7 +146,7 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
   }
 
   public function CreateAnnounce($options) {
-    $this->drupalGet('admin/build/node_announce/add');
+    $this->drupalGet('admin/system/config/node_announce/add');
     $this->drupalPost(NULL, $options, t('Create'));
   }
 
