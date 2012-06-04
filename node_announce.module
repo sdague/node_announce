@@ -41,7 +41,7 @@ function node_announce_menu() {
     'type' => MENU_LOCAL_TASK,
     'title' => 'Edit',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('node_announce_form', 3),
+    'page arguments' => array('node_announce_form', 4),
     'access arguments' => array('administer node announcements'),
     'file' => 'node_announce.admin.inc',
   );
@@ -50,7 +50,7 @@ function node_announce_menu() {
     'type' => MENU_LOCAL_TASK,
     'title' => 'Log',
     'page callback' => 'node_announce_view_log',
-    'page arguments' => array(3),
+    'page arguments' => array(4),
     'access arguments' => array('administer node announcements'),
     'file' => 'node_announce.admin.inc',
   );
@@ -58,7 +58,7 @@ function node_announce_menu() {
   $items['admin/config/system/node_announce/%'] = array(
     'title' => 'Preview Announcement',
     'page callback' => 'node_announce_preview',
-    'page arguments' => array(3),
+    'page arguments' => array(4),
     'access arguments' => array('administer node announcements'),
     'file' => 'node_announce.admin.inc',
   );
@@ -67,7 +67,7 @@ function node_announce_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'title' => 'Preview',
     'page callback' => 'node_announce_preview',
-    'page arguments' => array(3),
+    'page arguments' => array(4),
     'access arguments' => array('administer node announcements'),
     'file' => 'node_announce.admin.inc',
     'weight' => -1
@@ -77,7 +77,7 @@ function node_announce_menu() {
     'type' => MENU_LOCAL_TASK,
     'title' => 'Send',
     'page callback' => 'node_announce_send',
-    'page arguments' => array(3),
+    'page arguments' => array(4),
     'access arguments' => array('administer node announcements'),
     'file' => 'node_announce.admin.inc',
   );
@@ -211,19 +211,23 @@ function node_announce_send_announce($ann, $node) {
 /**
  * node_announce_mail : implementation of hook_mail()
  *
- * This is only called if mimemail isn't installed,
+ * This is only called if mimemail isn't installed
  */
 
 function node_announce_mail($key, &$message, $params) {
-  if ($key == 'node_announce') {
-    $node = $params['node'];
-    $ann = $params['announce'];
+  $node = $params['node'];
+  $ann = $params['announce'];
 
-    $message['to'] = $ann->email_to;
-    $message['from'] = $ann->email_from;
-    $message['subject'] = drupal_html_to_text(token_replace($ann->subject, 'node', $node));
-    $message['body'] = drupal_html_to_text(token_replace($ann->message, 'node', $node));
-  }
+  $message['to'] = $ann->email_to;
+  # yes, this is stupid, but it's the only way to get from set correctly
+  $message['headers']['From'] = $ann->email_from;
+  $message['headers']['Sender'] = $ann->email_from;
+  $message['headers']['Return-Path'] = $ann->email_from;
+
+  $message['subject'] = drupal_html_to_text(
+    token_replace($ann->subject, array('node' => $node)));
+  $message['body'][] = drupal_html_to_text(
+    token_replace($ann->message, array('node' => $node)));
 }
 
 

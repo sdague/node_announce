@@ -120,6 +120,8 @@ ORDER BY content_field_meeting_date.field_meeting_date_value ASC , content_field
  */
 
 function node_announce_next_match($ann, $before = FALSE) {
+  # error_log("found_announce: " . print_r($ann, TRUE));
+
   $array = explode(":", $ann->date_field);
   $type = $array[0];
   $field = $array[1];
@@ -135,7 +137,8 @@ function node_announce_next_match($ann, $before = FALSE) {
 
   $query = db_select('field_data_' . $field, 'f');
   $query->join('node', 'n', 'n.nid = f.entity_id');
-  $query->fields('n', 'nid')->condition('n.type', $type);
+  $query->fields('n', array('nid'))
+    ->condition('n.type', $type);
 
   if (!$before) {
     $query->condition('f.' . $fv, 'NOW()', '>')
@@ -167,11 +170,20 @@ function node_announce_applicable_nodes($ann) {
   $before = strftime("%Y-%m-%d %H:%M", time() + 24*60*60 * ($ann->days_before - 1));
   $after = strftime("%Y-%m-%d %H:%M", time() + 24*60*60 * ($ann->days_before + 1));
 
-  drupal_set_message("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='$type' AND n.nid = c.nid AND c.$fv > '$before' AND c.$fv < '$after'");
+ # drupal_set_message("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='$type' AND n.nid = c.nid AND c.$fv > '$before' AND c.$fv < '$after'");
 
-  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv > '%s' AND c.$fv < '%s'", $type, $before, $after);
-  while($nid = db_fetch_object($r)) {
-    $node = node_load($nid->nid);
+#  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv > '%s' AND c.$fv < '%s'", $type, $before, $after);
+
+  $query = db_select('field_data_' . $field, 'f');
+  $query->join('node', 'n', 'n.nid = f.entity_id');
+  $query->fields('n', array('nid'));
+  $query->condition('n.type', $type);
+  $query->condition('f.' . $fv, $before, '>');
+  $query->condition('f.' . $fv, $after, '<');
+  $result = $query->execute();
+
+  foreach ($result as $obj) {
+    $node = node_load($obj->nid);
     $nodes[] = $node;
   }
   return $nodes;

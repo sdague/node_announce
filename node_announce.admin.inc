@@ -6,7 +6,8 @@
 function node_announce_view_log($id) {
   $ann = node_announce_load($id);
   $records = node_announce_load_records($id);
-  return theme('node_announce_view_log', $ann, $records);
+  return theme('node_announce_view_log',
+    array('records' => $records));
 }
 
 
@@ -14,20 +15,26 @@ function node_announce_view_log($id) {
  * the page callback for the preview function.
  */
 function node_announce_preview($id) {
+  # error_log("node_announce id: " . print_r($id, TRUE));
+
   $ann = node_announce_load($id);
 
   $node = node_announce_next_match($ann);
   if (!$node) {
     $node = node_announce_next_match($ann, TRUE);
   }
+  # error_log("found_announce: " . print_r($ann, TRUE));
+  # error_log("found_node: " . print_r($node, TRUE));
 
-  return theme('node_announce_preview', $ann, $node);
+  return theme('node_announce_preview',
+    array('announce' => $ann, 'node' => $node));
 }
 
 /**
  * send a node announcement
  */
 function node_announce_send($id) {
+  # error_log("node_announce id: " . print_r($id, TRUE));
   $ann = node_announce_load($id);
 
   $node = node_announce_next_match($ann);
@@ -37,7 +44,7 @@ function node_announce_send($id) {
   node_announce_send_announce($ann, $node);
   drupal_set_message("Sent announcement");
 
-  drupal_goto("admin/build/node_announce/$id");
+  drupal_goto("admin/config/system/node_announce/$id");
 }
 
 /**
@@ -106,10 +113,10 @@ function node_announce_load_or_empty($aid) {
 
 function node_announce_form($form, $form_state) {
   $aid = 0;
-  if (array_key_exists('aid', $form_state['build_info']['args'])) {
-    $aid = $form_state['build_info']['args']['aid'];
+  if (array_key_exists('0', $form_state['build_info']['args'])) {
+    $aid = $form_state['build_info']['args']['0'];
   }
-  error_log("Form " . print_r($aid, TRUE));
+  error_log("Form: " . print_r($form_state['build_info']['args'], TRUE));
   _node_announce_load_api();
 
   if (isset($form_state['values']) &&
@@ -193,23 +200,23 @@ function node_announce_form_display_addedit($ann) {
     );
 
     $form['view']['token_help']['help'] = array(
-      '#markup' => theme('token_help', 'node'),
+      '#markup' => theme('token_tree', array('token_types' => 'all', 'click_insert' => FALSE, 'show_restricted' => TRUE))
     );
   }
 
   if (!$ann->id) {
     $form['buttons']['create'] = array(
       '#type' => 'submit',
-      '#markup' => t('Create')
+      '#value' => t('Create')
     );
   } else {
     $form['buttons']['save'] = array(
       '#type' => 'submit',
-      '#markup' => t('Save')
+      '#value' => t('Save')
     );
     $form['buttons']['delete'] = array(
       '#type' => 'submit',
-      '#markup' => t('Delete')
+      '#value' => t('Delete')
     );
   }
   return $form;
@@ -252,7 +259,7 @@ function node_announce_form_submit($form_id, &$form_state) {
         drupal_set_message(t('Failed to create announcment: @name',
             array('@name' => $obj->name)), 'error');
       }
-      $form_state['redirect'] = 'admin/build/node_announce/list';
+      $form_state['redirect'] = 'admin/config/system/node_announce/list';
       break;
 
     case "Save":
@@ -263,7 +270,7 @@ function node_announce_form_submit($form_id, &$form_state) {
         drupal_set_message(t('Failed to saved announcment: @name',
             array('@name' => $obj->name)), 'error');
       }
-      $form_state['redirect'] = 'admin/build/node_announce/' . $obj->id;
+      $form_state['redirect'] = 'admin/config/system/node_announce/' . $obj->id;
       break;
 
     case "Delete":
@@ -275,12 +282,12 @@ function node_announce_form_submit($form_id, &$form_state) {
     case "Really Delete?":
       $ann = node_announce_load($obj->id);
       node_announce_delete($ann->id);
-      $form_state['redirect'] = 'admin/build/node_announce/list';
+      $form_state['redirect'] = 'admin/config/system/node_announce/list';
       drupal_set_message("Deleted $ann->name");
       break;
 
     case "Cancel":
-      $form_state['redirect'] = 'admin/build/node_announce/list';
+      $form_state['redirect'] = 'admin/config/system/node_announce/list';
       drupal_set_message("Delete cancelled");
       break;
 
