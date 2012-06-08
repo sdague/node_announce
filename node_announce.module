@@ -92,10 +92,14 @@ function node_announce_init() {
 }
 
 /**
- * Implementation of hook_perm()
+ * Implementation of hook_permission()
  */
-function node_announce_perm() {
-  return array('administer node announcements');
+function node_announce_permission() {
+  return array('administer node announcements' => array(
+      'title' => t('Administer Node Announcements'),
+      'description' => t('Create / Edit / Remove Node Announcements.')
+    )
+  );
 }
 
 /**

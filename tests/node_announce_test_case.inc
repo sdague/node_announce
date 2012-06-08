@@ -11,114 +11,197 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
   public function createDateField() {
     # TODO: update to drupal 7 version... which is going to take a while
 
-    $datefield = array (
-      'field_name' => 'field_meeting_date',
-      'type_name' => 'meeting',
-      'display_settings' =>
-      array (
-        'weight' => '-4',
-        'parent' => '',
-        'label' =>
-        array (
-          'format' => 'inline',
-        ),
-        'teaser' =>
-        array (
-          'format' => 'default',
-          'exclude' => 0,
-        ),
-        'full' =>
-        array (
-          'format' => 'default',
-          'exclude' => 0,
-        ),
-        4 =>
-        array (
-          'format' => 'default',
-          'exclude' => 0,
-        ),
-        5 =>
-        array (
-          'format' => 'default',
-          'exclude' => 0,
-        ),
-        'token' =>
-        array (
-          'format' => 'default',
-          'exclude' => 0,
-        ),
-      ),
-      'widget_active' => '1',
-      'type' => 'date',
-      'required' => '1',
-      'multiple' => '1',
-      'db_storage' => '0',
-      'module' => 'date',
+    /* $datefield = array ( */
+    /*   'field_name' => 'field_meeting_date', */
+    /*   'type_name' => 'meeting', */
+    /*   'display_settings' => */
+    /*   array ( */
+    /*     'weight' => '-4', */
+    /*     'parent' => '', */
+    /*     'label' => */
+    /*     array ( */
+    /*       'format' => 'inline', */
+    /*     ), */
+    /*     'teaser' => */
+    /*     array ( */
+    /*       'format' => 'default', */
+    /*       'exclude' => 0, */
+    /*     ), */
+    /*     'full' => */
+    /*     array ( */
+    /*       'format' => 'default', */
+    /*       'exclude' => 0, */
+    /*     ), */
+    /*     4 => */
+    /*     array ( */
+    /*       'format' => 'default', */
+    /*       'exclude' => 0, */
+    /*     ), */
+    /*     5 => */
+    /*     array ( */
+    /*       'format' => 'default', */
+    /*       'exclude' => 0, */
+    /*     ), */
+    /*     'token' => */
+    /*     array ( */
+    /*       'format' => 'default', */
+    /*       'exclude' => 0, */
+    /*     ), */
+    /*   ), */
+    /*   'widget_active' => '1', */
+    /*   'type' => 'date', */
+    /*   'required' => '1', */
+    /*   'multiple' => '1', */
+    /*   'db_storage' => '0', */
+    /*   'module' => 'date', */
+    /*   'active' => '1', */
+    /*   'locked' => '0', */
+    /*   'columns' => */
+    /*   array ( */
+    /*     'value' => */
+    /*     array ( */
+    /*       'type' => 'varchar', */
+    /*       'length' => 20, */
+    /*       'not null' => false, */
+    /*       'sortable' => true, */
+    /*       'views' => true, */
+    /*     ), */
+    /*     'value2' => */
+    /*     array ( */
+    /*       'type' => 'varchar', */
+    /*       'length' => 20, */
+    /*       'not null' => false, */
+    /*       'sortable' => true, */
+    /*       'views' => false, */
+    /*     ), */
+    /*     'rrule' => */
+    /*     array ( */
+    /*       'type' => 'text', */
+    /*       'not null' => false, */
+    /*       'sortable' => false, */
+    /*       'views' => false, */
+    /*     ), */
+    /*   ), */
+    /*   'granularity' => */
+    /*   array ( */
+    /*     'year' => 'year', */
+    /*     'month' => 'month', */
+    /*     'day' => 'day', */
+    /*     'hour' => 'hour', */
+    /*     'minute' => 'minute', */
+    /*   ), */
+    /*   'timezone_db' => 'UTC', */
+    /*   'tz_handling' => 'site', */
+    /*   'todate' => 'optional', */
+    /*   'repeat' => 1, */
+    /*   'repeat_collapsed' => '1', */
+    /*   'default_format' => 'default', */
+    /*   'widget' => */
+    /*   array ( */
+    /*     'default_value' => 'now', */
+    /*     'default_value_code' => '', */
+    /*     'default_value2' => 'same', */
+    /*     'default_value_code2' => '', */
+    /*     'input_format' => 'Y-m-d H:i:s', */
+    /*     'input_format_custom' => '', */
+    /*     'increment' => '15', */
+    /*     'text_parts' => */
+    /*     array ( */
+    /*     ), */
+    /*     'year_range' => '-7:+3', */
+    /*     'label_position' => 'above', */
+    /*     'label' => 'Meeting Date', */
+    /*     'weight' => '-4', */
+    /*     'description' => '', */
+    /*     'type' => 'date_text_repeat', */
+    /*     'module' => 'date', */
+    /*   ), */
+    /* ); */
+
+
+    # $this->field_name = "meeting_date";
+    $this->field = array(
       'active' => '1',
-      'locked' => '0',
-      'columns' =>
-      array (
-        'value' =>
-        array (
-          'type' => 'varchar',
-          'length' => 20,
-          'not null' => false,
-          'sortable' => true,
-          'views' => true,
+      'cardinality' => '1',
+      'deleted' => '0',
+      'entity_types' => array(),
+      'field_name' => 'field_date',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'module' => 'date',
+      'settings' => array(
+        'cache_count' => '4',
+        'cache_enabled' => 0,
+        'granularity' => array(
+          'day' => 'day',
+          'hour' => 'hour',
+          'minute' => 'minute',
+          'month' => 'month',
+          'second' => 0,
+          'year' => 'year',
         ),
-        'value2' =>
-        array (
-          'type' => 'varchar',
-          'length' => 20,
-          'not null' => false,
-          'sortable' => true,
-          'views' => false,
-        ),
-        'rrule' =>
-        array (
-          'type' => 'text',
-          'not null' => false,
-          'sortable' => false,
-          'views' => false,
-        ),
+        'timezone_db' => 'UTC',
+        'todate' => 'optional',
+        'tz_handling' => 'site',
       ),
-      'granularity' =>
-      array (
-        'year' => 'year',
-        'month' => 'month',
-        'day' => 'day',
-        'hour' => 'hour',
-        'minute' => 'minute',
-      ),
-      'timezone_db' => 'UTC',
-      'tz_handling' => 'site',
-      'todate' => 'optional',
-      'repeat' => 1,
-      'repeat_collapsed' => '1',
-      'default_format' => 'default',
-      'widget' =>
-      array (
-        'default_value' => 'now',
-        'default_value_code' => '',
-        'default_value2' => 'same',
-        'default_value_code2' => '',
-        'input_format' => 'Y-m-d H:i:s',
-        'input_format_custom' => '',
-        'increment' => '15',
-        'text_parts' =>
-        array (
-        ),
-        'year_range' => '-7:+3',
-        'label_position' => 'above',
-        'label' => 'Meeting Date',
-        'weight' => '-4',
-        'description' => '',
-        'type' => 'date_text_repeat',
-        'module' => 'date',
-      ),
+      'translatable' => '0',
+      'type' => 'datetime',
     );
 
-    content_field_instance_create($datefield);
+    $this->field = field_create_field($this->field);
+    $this->field_id = $this->field['id'];
+    $this->instance = array(
+      'bundle' => 'event',
+      'deleted' => '0',
+      'description' => '',
+      'display' => array(
+        'default' => array(
+          'label' => 'above',
+          'module' => 'date',
+          'settings' => array(
+            'format_type' => 'long',
+            'fromto' => 'both',
+            'multiple_from' => '',
+            'multiple_number' => '',
+            'multiple_to' => '',
+          ),
+          'type' => 'date_default',
+          'weight' => '0',
+        ),
+        'teaser' => array(
+          'label' => 'above',
+          'settings' => array(),
+          'type' => 'hidden',
+          'weight' => 0,
+        ),
+      ),  'entity_type' => 'node',
+      'field_name' => 'field_date',
+      'label' => 'Date',
+      'required' => 0,
+      'settings' => array(
+        'default_value' => 'now',
+        'default_value2' => 'strtotime',
+        'default_value_code' => '',
+        'default_value_code2' => '+2 hours',
+        'user_register_form' => FALSE,
+      ),
+      'widget' => array(
+        'active' => 1,
+        'module' => 'date',
+        'settings' => array(
+          'display_all_day' => 0,
+          'increment' => 15,
+          'input_format' => 'Y-m-d H:i:s',
+          'input_format_custom' => '',
+          'label_position' => 'above',
+          'text_parts' => array(),
+          'year_range' => '-3:+3',
+        ),
+        'type' => 'date_text',
+        'weight' => '1',
+      ),
+    );
+    field_create_instance($this->instance);
   }
 
   public function assertLinkLabel($label, $index = 0, $message = '', $group = 'Other') {
@@ -131,22 +214,22 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
    *  These are utility functions for the subclasses to use
    */
 
-  public function CreateMeeting($options) {
-    $this->drupalGet('node/add/meeting');
-    if (array_key_exists('meeting_date', $options)) {
-      $options['field_meeting_date[value][date]'] = $options['meeting_date'];
-      unset($options['meeting_date']);
+  public function CreateEvent($options) {
+    $this->drupalGet('node/add/event');
+    if (array_key_exists('date', $options)) {
+      $options['field_date[und][0][value][date]'] = $options['date'];
+      unset($options['date']);
     }
-    if (array_key_exists('meeting_date_to', $options)) {
-      $options['field_meeting_date[value2][date]'] = $options['meeting_date_to'];
-      unset($options['meeting_date_to']);
+    if (array_key_exists('date_to', $options)) {
+      $options['field_date[und][0][value2][date]'] = $options['date_to'];
+      unset($options['date_to']);
     }
 
     $this->drupalPost(NULL, $options, t('Save'));
   }
 
   public function CreateAnnounce($options) {
-    $this->drupalGet('admin/system/config/node_announce/add');
+    $this->drupalGet('admin/config/system/node_announce/add');
     $this->drupalPost(NULL, $options, t('Create'));
   }
 
