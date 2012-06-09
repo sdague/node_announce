@@ -204,11 +204,11 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
     field_create_instance($this->instance);
   }
 
-  public function assertLinkLabel($label, $index = 0, $message = '', $group = 'Other') {
-    $links = $this->xpath('//a[@label="' . $label . '"]');
-    $message = ($message ?  $message : t('Link with label "!label" found.', array('!label' => $label)));
-    return $this->assert(isset($links[$index]), $message, $group);
-  }
+  /* public function assertLinkLabel($label, $index = 0, $message = '', $group = 'Other') { */
+  /*   $links = $this->xpath('//a[@label="' . $label . '"]'); */
+  /*   $message = ($message ?  $message : t('Link with label "!label" found.', array('!label' => $label))); */
+  /*   return $this->assert(isset($links[$index]), $message, $group); */
+  /* } */
 
   /**
    *  These are utility functions for the subclasses to use
@@ -246,8 +246,8 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
    /**
    * Runs cron in the Drupal installed by Simpletest.
    */
-  protected function cronRun() {
-    $this->drupalGet($GLOBALS['base_url'] . '/cron.php', array('external' => TRUE, 'query' => array('cron_key' => variable_get('cron_key', 'drupal'))));
-  }
+  /* protected function cronRun() { */
+  /*   $this->drupalGet($GLOBALS['base_url'] . '/cron.php', array('external' => TRUE, 'query' => array('cron_key' => variable_get('cron_key', 'drupal')))); */
+  /* } */
 
 }

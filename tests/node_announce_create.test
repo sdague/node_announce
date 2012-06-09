@@ -26,7 +26,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
    */
   public function setUp() {
     // Enable any modules required for the test.
-    parent::setUp('date_api', 'date_repeat', 'date', 'date_popup', 'token', 'node_announce');
+    parent::setUp('date_api', 'date_repeat', 'date', 'token', 'entity', 'entity_token', 'node_announce');
 
     // Create and log in our privileged user.
     $privs = array(
@@ -118,10 +118,10 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
         "email_from" => "a@b.com",
         "email_to" => "a@c.com",
         "date_field" => "event:field_date",
-        "subject" => "[ANNOUNCE] MHVLUG Meeting [field_date-day], [field_date-month] [field_date-d] at 6pm",
-        "message" => "MHVLUG is proud to announce our [field_date-month] meeting:
+        "subject" => "[ANNOUNCE] MHVLUG Meeting [node:field-date:value:custom:l], [node:field-date:value:custom:F] [node:field-date:value:custom:j] at 6pm",
+        "message" => "MHVLUG is proud to announce our [node:field-date:value:custom:F] meeting:
 
-<h2>[title]</h2>"
+<h2>[node:title]</h2>"
       ));
     $this->drupalGet("admin/config/system/node_announce");
     $this->assertText($name, "Ensure anounce was created");
@@ -138,7 +138,7 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
     $this->assertText("From: a@b.com", "Ensure from was found");
     $this->assertText("To: a@c.com", "Ensure to was found");
     $this->assertText("Subject: [ANNOUNCE] MHVLUG Meeting $wday, $month $day at 6pm", "Ensure subject is right");
-    $this->assertRaw("MHVLUG is proud to announce our $month meeting:\n\n<h2>Meeting 2</h2>", "Ensure first part of body is found");
+    $this->assertRaw("MHVLUG is proud to announce our $month meeting:\n\n<h2>Event 2</h2>", "Ensure first part of body is found");
   }
 
   public function _checkAnnounceEdit($name, $options) {

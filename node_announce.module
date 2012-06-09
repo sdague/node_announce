@@ -190,13 +190,12 @@ function node_announce_process() {
  */
 
 function node_announce_send_announce($ann, $node) {
-  error_log("(node_announce) key => " .  $ann->email_token);
   if (module_exists('mimemail')) {
     $result = mimemail(
       $ann->email_from,
       $ann->email_to,
-      token_replace($ann->subject, 'node', $node),
-      token_replace($ann->message, 'node', $node),
+      token_replace($ann->subject, array('node' => $node)),
+      token_replace($ann->message, array('node' => $node)),
       NULL, /* plain text only */
       array(
         'From' => $ann->email_from,
@@ -223,6 +222,7 @@ function node_announce_mail($key, &$message, $params) {
   $ann = $params['announce'];
 
   $message['to'] = $ann->email_to;
+  $message['from'] = $ann->email_from;
   # yes, this is stupid, but it's the only way to get from set correctly
   $message['headers']['From'] = $ann->email_from;
   $message['headers']['Sender'] = $ann->email_from;

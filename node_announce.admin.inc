@@ -15,16 +15,12 @@ function node_announce_view_log($id) {
  * the page callback for the preview function.
  */
 function node_announce_preview($id) {
-  # error_log("node_announce id: " . print_r($id, TRUE));
-
   $ann = node_announce_load($id);
 
   $node = node_announce_next_match($ann);
   if (!$node) {
     $node = node_announce_next_match($ann, TRUE);
   }
-  # error_log("found_announce: " . print_r($ann, TRUE));
-  # error_log("found_node: " . print_r($node, TRUE));
 
   return theme('node_announce_preview',
     array('announce' => $ann, 'node' => $node));
@@ -34,7 +30,6 @@ function node_announce_preview($id) {
  * send a node announcement
  */
 function node_announce_send($id) {
-  # error_log("node_announce id: " . print_r($id, TRUE));
   $ann = node_announce_load($id);
 
   $node = node_announce_next_match($ann);
@@ -107,16 +102,15 @@ function node_announce_load_or_empty($aid) {
   }
   return $ann;
 }
+
 /**
  * Node add announcements
  */
-
 function node_announce_form($form, $form_state) {
   $aid = 0;
   if (array_key_exists('0', $form_state['build_info']['args'])) {
     $aid = $form_state['build_info']['args']['0'];
   }
-  error_log("Form: " . print_r($form_state['build_info']['args'], TRUE));
   _node_announce_load_api();
 
   if (isset($form_state['values']) &&
@@ -181,6 +175,7 @@ function node_announce_form_display_addedit($ann) {
   $form['subject'] = array(
     '#title' => t('Announcement Subject'),
     '#default_value' => $ann->subject,
+    '#maxlength' => 250,
     '#type' => 'textfield',
   );
 

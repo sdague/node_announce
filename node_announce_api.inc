@@ -53,14 +53,12 @@ function node_announce_save(&$announce) {
 }
 
 function node_announce_delete_records_by_nid($nid) {
-  # db_query("DELETE FROM {node_announce_records} where nid=%d", $nid);
   db_delete('node_announce_records')
     ->condition('nid', $nid)
     ->execute();
 }
 
 function node_announce_delete_records_by_aid($aid) {
-  # db_query("DELETE FROM {node_announce_records} where aid=%d", $aid);
   db_delete('node_announce_records')
     ->condition('aid', $aid)
     ->execute();
@@ -68,7 +66,6 @@ function node_announce_delete_records_by_aid($aid) {
 
 function node_announce_delete($aid) {
   node_announce_delete_records_by_aid($aid);
-  # db_query("DELETE FROM {node_announce} where id=%d", $aid);
   db_delete('node_announce')
     ->condition('id', $aid)
     ->execute();
@@ -106,34 +103,21 @@ function node_announce_date_field_pretty($field) {
   return $fields[$field];
 }
 
+
 /**
  *
- * QUERY that we are looking for
- SELECT *
-FROM  `content_field_meeting_date` ,  `node`
-WHERE node.type =  'meeting'
-AND node.nid = content_field_meeting_date.nid
-AND content_field_meeting_date.field_meeting_date_value > NOW( )
-ORDER BY content_field_meeting_date.field_meeting_date_value ASC , content_field_meeting_date.vid DESC
-
-
  */
-
-function node_announce_next_match($ann, $before = FALSE) {
-  # error_log("found_announce: " . print_r($ann, TRUE));
-
+function node_announce_next_match($ann, $before=FALSE) {
   $array = explode(":", $ann->date_field);
   $type = $array[0];
   $field = $array[1];
   $fv = $field . "_value";
 
-  /*  if (!$before) { */
-  /*   $clause = "> NOW() ORDER BY c.$fv ASC"; */
-  /* } else { */
-  /*   $clause = "< NOW() ORDER BY c.$fv DESC"; */
-  /* } */
-
-  /* $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv $clause", $type); */
+  // TODO: this is inefficient, but I can't figure out how to get a litteral
+  // NOW() down to the database. So select it, use it, and move on
+  $q = db_select('node', 'n');
+  $q->addExpression('NOW()', 'now');
+  $n = $q->execute()->fetchObject();
 
   $query = db_select('field_data_' . $field, 'f');
   $query->join('node', 'n', 'n.nid = f.entity_id');
@@ -141,12 +125,13 @@ function node_announce_next_match($ann, $before = FALSE) {
     ->condition('n.type', $type);
 
   if (!$before) {
-    $query->condition('f.' . $fv, 'NOW()', '>')
-      ->orderBy('f.' . $fv, 'ASC');
+    $query->condition('f.' . $fv, $n->now, '>');
+    $query->orderBy('f.' . $fv, 'ASC');
   } else {
-    $query->condition('f.' . $fv, 'NOW()', '<')
-      ->orderBy('f.' . $fv, 'DESC');
+    $query->condition('f.' . $fv, $n->now, '<');
+    $query->orderBy('f.' . $fv, 'DESC');
   }
+  $query->range(0, 1);
   $obj = $query->execute()->fetchObject();
   if (!$obj) {
     return NULL;
@@ -169,10 +154,6 @@ function node_announce_applicable_nodes($ann) {
 
   $before = strftime("%Y-%m-%d %H:%M", time() + 24*60*60 * ($ann->days_before - 1));
   $after = strftime("%Y-%m-%d %H:%M", time() + 24*60*60 * ($ann->days_before + 1));
-
- # drupal_set_message("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='$type' AND n.nid = c.nid AND c.$fv > '$before' AND c.$fv < '$after'");
-
-#  $r = db_query("SELECT n.nid from {content_$field} c, {node} n WHERE n.type='%s' AND n.nid = c.nid AND c.$fv > '%s' AND c.$fv < '%s'", $type, $before, $after);
 
   $query = db_select('field_data_' . $field, 'f');
   $query->join('node', 'n', 'n.nid = f.entity_id');
@@ -200,7 +181,7 @@ function node_announce_already_announced($ann, $node) {
     ->condition("aid", $ann->id)
     ->execute()
     ->fetchObject();
-  #  $row = db_fetch_object(db_query("SELECT last_sent from {node_announce_records} n WHERE n.nid=%d and n.aid=%d", $node->nid, $ann->id));
+
   if ($obj) {
     return $obj->last_sent;
   } else {
@@ -214,7 +195,7 @@ function node_announce_load_records($aid) {
     ->condition('aid', $aid)
     ->orderBy('last_sent', 'DESC')
     ->execute();
-  # $r = db_query("SELECT * FROM {node_announce_records} where aid=%d ORDER by last_sent DESC", $aid);
+
   $records = array();
   foreach ($result as $record) {
     $record->node = node_load($record->nid);
