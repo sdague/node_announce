@@ -9,117 +9,8 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
   public $format = "Y-m-d H:i";
 
   public function createDateField() {
-    # TODO: update to drupal 7 version... which is going to take a while
-
-    /* $datefield = array ( */
-    /*   'field_name' => 'field_meeting_date', */
-    /*   'type_name' => 'meeting', */
-    /*   'display_settings' => */
-    /*   array ( */
-    /*     'weight' => '-4', */
-    /*     'parent' => '', */
-    /*     'label' => */
-    /*     array ( */
-    /*       'format' => 'inline', */
-    /*     ), */
-    /*     'teaser' => */
-    /*     array ( */
-    /*       'format' => 'default', */
-    /*       'exclude' => 0, */
-    /*     ), */
-    /*     'full' => */
-    /*     array ( */
-    /*       'format' => 'default', */
-    /*       'exclude' => 0, */
-    /*     ), */
-    /*     4 => */
-    /*     array ( */
-    /*       'format' => 'default', */
-    /*       'exclude' => 0, */
-    /*     ), */
-    /*     5 => */
-    /*     array ( */
-    /*       'format' => 'default', */
-    /*       'exclude' => 0, */
-    /*     ), */
-    /*     'token' => */
-    /*     array ( */
-    /*       'format' => 'default', */
-    /*       'exclude' => 0, */
-    /*     ), */
-    /*   ), */
-    /*   'widget_active' => '1', */
-    /*   'type' => 'date', */
-    /*   'required' => '1', */
-    /*   'multiple' => '1', */
-    /*   'db_storage' => '0', */
-    /*   'module' => 'date', */
-    /*   'active' => '1', */
-    /*   'locked' => '0', */
-    /*   'columns' => */
-    /*   array ( */
-    /*     'value' => */
-    /*     array ( */
-    /*       'type' => 'varchar', */
-    /*       'length' => 20, */
-    /*       'not null' => false, */
-    /*       'sortable' => true, */
-    /*       'views' => true, */
-    /*     ), */
-    /*     'value2' => */
-    /*     array ( */
-    /*       'type' => 'varchar', */
-    /*       'length' => 20, */
-    /*       'not null' => false, */
-    /*       'sortable' => true, */
-    /*       'views' => false, */
-    /*     ), */
-    /*     'rrule' => */
-    /*     array ( */
-    /*       'type' => 'text', */
-    /*       'not null' => false, */
-    /*       'sortable' => false, */
-    /*       'views' => false, */
-    /*     ), */
-    /*   ), */
-    /*   'granularity' => */
-    /*   array ( */
-    /*     'year' => 'year', */
-    /*     'month' => 'month', */
-    /*     'day' => 'day', */
-    /*     'hour' => 'hour', */
-    /*     'minute' => 'minute', */
-    /*   ), */
-    /*   'timezone_db' => 'UTC', */
-    /*   'tz_handling' => 'site', */
-    /*   'todate' => 'optional', */
-    /*   'repeat' => 1, */
-    /*   'repeat_collapsed' => '1', */
-    /*   'default_format' => 'default', */
-    /*   'widget' => */
-    /*   array ( */
-    /*     'default_value' => 'now', */
-    /*     'default_value_code' => '', */
-    /*     'default_value2' => 'same', */
-    /*     'default_value_code2' => '', */
-    /*     'input_format' => 'Y-m-d H:i:s', */
-    /*     'input_format_custom' => '', */
-    /*     'increment' => '15', */
-    /*     'text_parts' => */
-    /*     array ( */
-    /*     ), */
-    /*     'year_range' => '-7:+3', */
-    /*     'label_position' => 'above', */
-    /*     'label' => 'Meeting Date', */
-    /*     'weight' => '-4', */
-    /*     'description' => '', */
-    /*     'type' => 'date_text_repeat', */
-    /*     'module' => 'date', */
-    /*   ), */
-    /* ); */
-
-
-    # $this->field_name = "meeting_date";
+    # I got here by doing a features export, then grabbing
+    # the relevant bits, if anyone needs to figure this out for 8
     $this->field = array(
       'active' => '1',
       'cardinality' => '1',
@@ -204,12 +95,6 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
     field_create_instance($this->instance);
   }
 
-  /* public function assertLinkLabel($label, $index = 0, $message = '', $group = 'Other') { */
-  /*   $links = $this->xpath('//a[@label="' . $label . '"]'); */
-  /*   $message = ($message ?  $message : t('Link with label "!label" found.', array('!label' => $label))); */
-  /*   return $this->assert(isset($links[$index]), $message, $group); */
-  /* } */
-
   /**
    *  These are utility functions for the subclasses to use
    */
@@ -242,12 +127,5 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
   {
     return $this->drupalPost($one, $two, $three);
   }
-
-   /**
-   * Runs cron in the Drupal installed by Simpletest.
-   */
-  /* protected function cronRun() { */
-  /*   $this->drupalGet($GLOBALS['base_url'] . '/cron.php', array('external' => TRUE, 'query' => array('cron_key' => variable_get('cron_key', 'drupal')))); */
-  /* } */
 
 }
