@@ -190,25 +190,8 @@ function node_announce_process() {
  */
 
 function node_announce_send_announce($ann, $node) {
-  if (module_exists('mimemail')) {
-    $result = mimemail(
-      $ann->email_from,
-      $ann->email_to,
-      token_replace($ann->subject, array('node' => $node)),
-      token_replace($ann->message, array('node' => $node)),
-      NULL, /* plain text only */
-      array(
-        'From' => $ann->email_from,
-        'Sender' => $ann->email_from),
-      NULL, /* custom plain text */
-      array(), /* attachments .... maybe put ical here later? */
-      $ann->email_token
-    );
-  } else {
-    $params = array('announce' => $ann, 'node' => $node);
-    $result = drupal_mail('node_announce', $ann->email_token, $ann->email_to, language_default(), $params);
-  }
-
+  $params = array('announce' => $ann, 'node' => $node);
+  $result = drupal_mail('node_announce', $ann->email_token, $ann->email_to, language_default(), $params);
 }
 
 /**
@@ -230,8 +213,14 @@ function node_announce_mail($key, &$message, $params) {
 
   $message['subject'] = drupal_html_to_text(
     token_replace($ann->subject, array('node' => $node)));
-  $message['body'][] = drupal_html_to_text(
-    token_replace($ann->message, array('node' => $node)));
+
+  if (module_exists('mimemail')) {
+    $message['body'][] = token_replace(
+      $ann->message, array('node' => $node));
+  } else {
+    $message['body'][] = drupal_html_to_text(
+      token_replace($ann->message, array('node' => $node)));
+  }
 }
 
 
