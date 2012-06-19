@@ -1,3 +1,6 @@
+NODE ANNOUNCE
+========================================
+
 Node Announce is designed to solve a problem I had. Most of my
 community drupal sites are basically event listings. Clubs that have
 one or two events going on every month. These organizations also have
@@ -7,26 +10,23 @@ sent out announcements for the events on our site.
 
 Thus became Node Announce.
 
-** REQUIREMENTS **
+REQUIREMENTS
+----------------------------------------
 
 Required Modules:
- * date
- * date_api
- * token
+- date
+- date_api
+- token
 
 Suggested Modules:
- * notification_content
- * mimemail
-
-If you have notification_content installed you'll be able to use body
-and teaser tokens in your announcements. Default Token doesn't provide
-that.
+- mimemail
 
 If you have mimemail installed, emails will be sent as HTML mail by
 default. If not, the emails will be down converted to plain text using
 drupal internal features.
 
-** USAGE **
+USAGE
+----------------------------------------
 
 Once you have installed Node Announce you will need to create a new
 announcement (admin/build/node_announce/add).
