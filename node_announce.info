@@ -4,5 +4,18 @@ core = 7.x
 dependencies[] = 'token'
 dependencies[] = 'date'
 
+files[] = node_announce.module
+files[] = node_announce.install
+files[] = node_announce_api.inc
+files[] = node_announce.admin.inc
+
+files[] = theme/node-announce-list.tpl.php
+files[] = theme/node-announce-preview.tpl.php
+files[] = theme/node-announce-view-log.tpl.php
+
+files[] = css/node_announce.css
+
 files[] = tests/node_announce_create.test
 files[] = tests/node_announce_cron.test
+
+configure = admin/config/system/node_announce

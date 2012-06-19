@@ -10,14 +10,41 @@
 /**
  * Implementation of hook_help()
  */
-function node_announce_help($section) {
+function node_announce_help($path, $arg) {
   $output = '';
-  switch($section) {
+  switch($path) {
     case 'admin/help#node_announce':
-      $output = '
-
-';
+      $output =
+        '<h2>' . t('About') . '</h2>' .
+        t('Node Announce is designed to solve a problem I had. Most of my
+community drupal sites are basically event listings. Clubs that have
+one or two events going on every month. These organizations also have
+discussion lists that are on some other site (yahoo, or a straight
+mailman list). What I wanted was a way to automatically and regularly
+sent out announcements for the events on our site.') .
+        '<p>' .
+        t('Thus became Node Announce.').
+        '<h3>'. t('Usage') . '</h3>'.
+        t('Once you have installed Node Announce you will need to create a <a href="admin/config/system/node_announce/add">new
+announcement</a>.').
+        '<p>'.
+        t('You will then be creating an announcement for a Content Type, based on
+a specific Date field that it has. The days before field is used to
+send out the email announce aproximately that many days before (as set
+by the user). This is aproximately as it runs as a drupal cron
+task. Because of possible timing issues Node Announce will actually
+send out an email sometime within the timeblock that is 24 hours
+before and 24 hours prior to the ideal date/time.').
+        '<p>'.
+        t('Drupal Cron <b>must</b> be run at least daily for Node Announce to be reliable.').
+        '<p>'.
+        t('The announcement contains the from and to email address, as well as
+subject and message fields that are tokenized. You can use any of the
+standard tokens in either the subject or body.')
+        ;
+      break;
   }
+  return $output;
 }
 
 /**

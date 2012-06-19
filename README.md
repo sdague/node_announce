@@ -29,7 +29,7 @@ USAGE
 ----------------------------------------
 
 Once you have installed Node Announce you will need to create a new
-announcement (admin/build/node_announce/add).
+announcement (admin/config/system/node_announce/add).
 
 You will then be creating an announcement for a Content Type, based on
 a specific Date field that it has. The days before field is used to
@@ -51,7 +51,8 @@ A record of the announcement being sent out for the event is made, so
 that an announcement will only be sent out once for each combo of
 Announcement + Node.
 
-** EXPECTED USE **
+EXPECTED USE
+----------------------------------------
 
 My site has a content type called meeting, with a Date field
 meeting_date. I create one Annoucement for 7 days before any Meeting /
@@ -67,12 +68,13 @@ Announcement that has the same content but sends to a private email
 address. This will ensure that you get to see what the email looks
 like prior to going to hundreds of people.
 
-** KNOWN LIMITATIONS **
+KNOWN LIMITATIONS
+----------------------------------------
 
-* Doesn't work with events that use the date_repeat_api. This is a
-  future enhancement.
+Repeating dates are dicey. Use with caution.
 
-** GET INVOLVED **
+GET INVOLVED
+----------------------------------------
 
 Planning for the future of this module happens over on a trello board
 - https://trello.com/board/node-announce/4e7734b88a99f20bf70d80e3 all
