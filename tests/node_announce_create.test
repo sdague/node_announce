@@ -91,8 +91,9 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
     $this->assertText("Name can not be blank");
     $this->assertText("Days must be a positive integer");
-    $this->assertText("Email from must be valid email address");
-    $this->assertText("Email to must be valid email address");
+    // TODO: bring back if we add back validation
+    // $this->assertText("Email from must be valid email address");
+    // $this->assertText("Email to must be valid email address");
 
     $values = array(
       "name" => $this->randomString(),

@@ -191,7 +191,8 @@ function node_announce_process() {
 
 function node_announce_send_announce($ann, $node) {
   $params = array('announce' => $ann, 'node' => $node);
-  $result = drupal_mail('node_announce', $ann->email_token, $ann->email_to, language_default(), $params);
+  $token = ($ann->email_token) ? $ann->email_token : "node_announce";
+  $result = drupal_mail('node_announce', $token, $ann->email_to, language_default(), $params);
 }
 
 /**
@@ -204,12 +205,16 @@ function node_announce_mail($key, &$message, $params) {
   $node = $params['node'];
   $ann = $params['announce'];
 
-  $message['to'] = $ann->email_to;
-  $message['from'] = $ann->email_from;
+  $to = token_replace($ann->email_to, array('node' => $node));
+  $from = token_replace($ann->email_from, array('node' => $node));
+  // TODO: we should validate to and from here
+
+  $message['to'] = $to;
+  $message['from'] = $from;
   # yes, this is stupid, but it's the only way to get from set correctly
-  $message['headers']['From'] = $ann->email_from;
-  $message['headers']['Sender'] = $ann->email_from;
-  $message['headers']['Return-Path'] = $ann->email_from;
+  $message['headers']['From'] = $from;
+  $message['headers']['Sender'] = $from;
+  $message['headers']['Return-Path'] = $from;
 
   $message['subject'] = drupal_html_to_text(
     token_replace($ann->subject, array('node' => $node)));
@@ -222,7 +227,6 @@ function node_announce_mail($key, &$message, $params) {
       token_replace($ann->message, array('node' => $node)));
   }
 }
-
 
 function node_announce_title_edit($id) {
   _node_announce_load_api();

@@ -230,12 +230,16 @@ function node_announce_form_validate($form, &$form_state) {
     if ($form_state['values']['email_token'] != "" && !preg_match("/^[\w-]+$/", $form_state['values']['email_token'])) {
       form_set_error('email_key', t('Email key can only contain letters, numbers, dashes, and underscores'));
     }
-    if (!valid_email_address($form_state['values']['email_from'])) {
-      form_set_error('email_from', t('Email from must be valid email address'));
-    }
-    if (!valid_email_address($form_state['values']['email_to'])) {
-      form_set_error('email_to', t('Email to must be valid email address'));
-    }
+
+    // TODO: should see if there is a sane way to validate email addresses with tokens
+    /**
+       if (!valid_email_address($form_state['values']['email_from'])) {
+       form_set_error('email_from', t('Email from must be valid email address'));
+       }
+       if (!valid_email_address($form_state['values']['email_to'])) {
+       form_set_error('email_to', t('Email to must be valid email address'));
+       }
+    */
   }
 }
 
