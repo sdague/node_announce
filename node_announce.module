@@ -259,7 +259,7 @@ function node_announce_mail($key, &$message, $params) {
   $message['subject'] = drupal_html_to_text(
     token_replace($ann->subject, array('node' => $node)));
 
-  if (module_exists('mimemail')) {
+  if (module_exists('mimemail') || module_exists('htmlmail')) {
     $message['body'][] = token_replace(
       $ann->message, array('node' => $node));
   } else {
