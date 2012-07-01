@@ -4,6 +4,8 @@
  * the log for the items
  */
 function node_announce_view_log($id) {
+  _node_announce_load_api();
+
   $ann = node_announce_load($id);
   $records = node_announce_load_records($id);
   return theme('node_announce_view_log',
@@ -15,6 +17,8 @@ function node_announce_view_log($id) {
  * the page callback for the preview function.
  */
 function node_announce_preview($id) {
+  _node_announce_load_api();
+
   $ann = node_announce_load($id);
 
   $node = node_announce_next_match($ann);
@@ -30,6 +34,8 @@ function node_announce_preview($id) {
  * send a node announcement
  */
 function node_announce_send($id) {
+  _node_announce_load_api();
+
   $ann = node_announce_load($id);
 
   $node = node_announce_next_match($ann);
