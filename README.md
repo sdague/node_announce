@@ -1,3 +1,4 @@
+
 NODE ANNOUNCE
 ========================================
 
@@ -19,9 +20,9 @@ Required Modules:
 - token
 
 Suggested Modules:
-- mimemail
+- htmlmail
 
-If you have mimemail installed, emails will be sent as HTML mail by
+If you have htmlmail installed, emails will be sent as HTML mail by
 default. If not, the emails will be down converted to plain text using
 drupal internal features.
 
