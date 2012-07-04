@@ -1,11 +1,12 @@
 <?php
+/***********************************************
+ * @file
+ *
+ * A base test case which makes testing a lot easier. This includes
+ * the ability to setup custom date fields and an event type.
+ */
 
 class NodeAnnounceTestCase extends DrupalWebTestCase {
-  /**
-   * This tests to ensure that I've created the links that I expect using the
-   * label attribute on them. It's a bit nicer than the text checking.
-   */
-
   public $format = "Y-m-d H:i";
 
   public function createDateField() {
@@ -118,13 +119,11 @@ class NodeAnnounceTestCase extends DrupalWebTestCase {
     $this->drupalPost(NULL, $options, t('Create'));
   }
 
-  public function Get($url)
-  {
+  public function Get($url) {
     return $this->drupalGet($url);
   }
 
-  public function Post($one, $two, $three)
-  {
+  public function Post($one, $two, $three) {
     return $this->drupalPost($one, $two, $three);
   }
 

@@ -40,5 +40,4 @@ function node_announce_schema() {
 function node_announce_update_6001() {
   $ret = array();
   db_add_field($ret, 'node_announce', 'email_token', array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''));
-  return $ret;
 }

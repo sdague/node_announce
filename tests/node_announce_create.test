@@ -1,5 +1,7 @@
 <?php
 /**
+ * @file
+ *
  * Basic sanity testing for node_announce
  */
 require_once "node_announce_test_case.inc";
@@ -58,13 +60,13 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
 
     $this->CreateEvent(array(
         "title" => "Event 1",
-        "date" => date($this->format, time() + 24*60*60),
-        "date_to" => date($this->format, time() + 24*60*60 + 60*60)
+        "date" => date($this->format, REQUEST_TIME + 24*60*60),
+        "date_to" => date($this->format, REQUEST_TIME + 24*60*60 + 60*60)
       ));
     $this->CreateEvent(array(
         "title" => "Event 2",
-        "date" => date($this->format, time() + 20*60*60),
-        "date_to" => date($this->format, time() + 20*60*60 + 60*60),
+        "date" => date($this->format, REQUEST_TIME + 20*60*60),
+        "date_to" => date($this->format, REQUEST_TIME + 20*60*60 + 60*60),
       ));
 
     $this->drupalGet("node/5");
@@ -129,9 +131,9 @@ class NodeAnnounceBasicTestCase extends NodeAnnounceTestCase {
   }
 
   public function _checkAnnouncePreview($name) {
-    $wday = strftime("%A", time() + 20*60*60);
-    $month = strftime("%B", time() + 20*60*60);
-    $day = trim(strftime("%e", time() + 20*60*60));
+    $wday = strftime("%A", REQUEST_TIME + 20*60*60);
+    $month = strftime("%B", REQUEST_TIME + 20*60*60);
+    $day = trim(strftime("%e", REQUEST_TIME + 20*60*60));
 
     $this->drupalGet("admin/config/system/node_announce");
     $this->clickLink($name, 0);

@@ -11,7 +11,7 @@
  */
 function node_announce_help($path, $arg) {
   $output = '';
-  switch($path) {
+  switch ($path) {
     case 'admin/help#node_announce':
       $output =
         '<h2>' . t('About') . '</h2>' .
@@ -22,21 +22,21 @@ discussion lists that are on some other site (yahoo, or a straight
 mailman list). What I wanted was a way to automatically and regularly
 sent out announcements for the events on our site.') .
         '<p>' .
-        t('Thus became Node Announce.').
-        '<h3>'. t('Usage') . '</h3>'.
+        t('Thus became Node Announce.') .
+        '<h3>' . t('Usage') . '</h3>' .
         t('Once you have installed Node Announce you will need to create a <a href="admin/config/system/node_announce/add">new
-announcement</a>.').
-        '<p>'.
+announcement</a>.') .
+        '<p>' .
         t('You will then be creating an announcement for a Content Type, based on
 a specific Date field that it has. The days before field is used to
 send out the email announce aproximately that many days before (as set
 by the user). This is aproximately as it runs as a drupal cron
 task. Because of possible timing issues Node Announce will actually
 send out an email sometime within the timeblock that is 24 hours
-before and 24 hours prior to the ideal date/time.').
-        '<p>'.
-        t('Drupal Cron <b>must</b> be run at least daily for Node Announce to be reliable.').
-        '<p>'.
+before and 24 hours prior to the ideal date/time.') .
+        '<p>' .
+        t('Drupal Cron <b>must</b> be run at least daily for Node Announce to be reliable.') .
+        '<p>' .
         t('The announcement contains the from and to email address, as well as
 subject and message fields that are tokenized. You can use any of the
 standard tokens in either the subject or body.')
@@ -127,7 +127,8 @@ function node_announce_menu() {
 
 
 function node_announce_init() {
-  drupal_add_css(drupal_get_path('module', 'node_announce') .'/css/node_announce.css');
+  drupal_add_css(drupal_get_path('module', 'node_announce') .
+    '/css/node_announce.css');
   _node_announce_load_api();
 }
 
@@ -260,5 +261,6 @@ function node_announce_title_edit($id) {
 }
 
 function _node_announce_load_api() {
-  require_once('./' . drupal_get_path('module', 'node_announce') . '/node_announce_api.inc');
+  require_once DRUPAL_ROOT . '/' .
+    drupal_get_path('module', 'node_announce') . '/node_announce_api.inc';
 }

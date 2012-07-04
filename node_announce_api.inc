@@ -18,9 +18,8 @@ function node_announce_load($id) {
       ->condition('id', $id, '=')
       ->execute()
       ->fetchObject();
-  } else {
-    return NULL;
   }
+  return NULL;
 }
 
 
@@ -47,9 +46,8 @@ function node_announce_save(&$announce) {
   $announce_current = node_announce_load($announce->id);
   if ($announce_current) {
     return drupal_write_record('node_announce', $announce, 'id');
-  } else {
-    return drupal_write_record('node_announce', $announce);
   }
+  return drupal_write_record('node_announce', $announce);
 }
 
 function node_announce_delete_records_by_nid($nid) {
@@ -127,7 +125,8 @@ function node_announce_next_match($ann, $before=FALSE) {
   if (!$before) {
     $query->condition('f.' . $fv, $n->now, '>');
     $query->orderBy('f.' . $fv, 'ASC');
-  } else {
+  }
+  else {
     $query->condition('f.' . $fv, $n->now, '<');
     $query->orderBy('f.' . $fv, 'DESC');
   }
@@ -152,8 +151,10 @@ function node_announce_applicable_nodes($ann) {
   $fv = $field . "_value";
   $nodes = array();
 
-  $before = strftime("%Y-%m-%d %H:%M", time() + 24*60*60 * ($ann->days_before - 1));
-  $after = strftime("%Y-%m-%d %H:%M", time() + 24*60*60 * ($ann->days_before + 1));
+  $before = strftime("%Y-%m-%d %H:%M",
+                     REQUEST_TIME + 24*60*60 * ($ann->days_before - 1));
+  $after = strftime("%Y-%m-%d %H:%M",
+                    REQUEST_TIME + 24*60*60 * ($ann->days_before + 1));
 
   $query = db_select('field_data_' . $field, 'f');
   $query->join('node', 'n', 'n.nid = f.entity_id');
@@ -184,9 +185,9 @@ function node_announce_already_announced($ann, $node) {
 
   if ($obj) {
     return $obj->last_sent;
-  } else {
-    return NULL;
   }
+
+  return NULL;
 }
 
 function node_announce_load_records($aid) {
@@ -210,7 +211,7 @@ function node_announce_record_send($aid, $nid) {
   $obj = (object)array(
                        "nid" => $nid,
                        "aid" => $aid,
-                       "last_sent" => time()
+                       "last_sent" => REQUEST_TIME
                        );
   drupal_write_record('node_announce_records', $obj);
 }

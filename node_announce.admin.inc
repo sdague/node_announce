@@ -43,7 +43,7 @@ function node_announce_send($id) {
     $node = node_announce_next_match($ann, TRUE);
   }
   node_announce_send_announce($ann, $node);
-  drupal_set_message("Sent announcement");
+  drupal_set_message(t("Sent announcement"));
 
   drupal_goto("admin/config/system/node_announce/$id");
 }
@@ -90,22 +90,24 @@ function node_announce_form_display_delete($form_state, $aid) {
 }
 
 function node_announce_load_or_empty($aid) {
+  // TODO: there must be a better pattern for a single form for add and edit
+  // without this, we gets lot of undefined issues
+  $ann = (object)array(
+    "id" => NULL,
+    "name" => NULL,
+    "date_field" => NULL,
+    "email_token" => "",
+    "email_to" => NULL,
+    "email_from" => NULL,
+    "message" => NULL,
+    "subject" => NULL,
+    "days_before" => NULL
+  );
+
   if ($aid) {
     $ann = node_announce_load($aid);
-  } else {
-    // TODO: there must be a better pattern for a single form for add and edit
-    $ann = (object)array(
-                         "id" => NULL,
-                         "name" => NULL,
-                         "date_field" => NULL,
-                         "email_token" => "",
-                         "email_to" => NULL,
-                         "email_from" => NULL,
-                         "message" => NULL,
-                         "subject" => NULL,
-                         "days_before" => NULL
-                         );
   }
+
   return $ann;
 }
 
@@ -210,7 +212,8 @@ function node_announce_form_display_addedit($ann) {
       '#type' => 'submit',
       '#value' => t('Create')
     );
-  } else {
+  }
+  else {
     $form['buttons']['save'] = array(
       '#type' => 'submit',
       '#value' => t('Save')
@@ -257,10 +260,11 @@ function node_announce_form_submit($form_id, &$form_state) {
 
   switch ($obj->op) {
     case "Create":
-      if(node_announce_save($obj)) {
+      if (node_announce_save($obj)) {
         drupal_set_message(t('Successfully created announcment: @name',
             array('@name' => $obj->name)));
-      } else {
+      }
+      else {
         drupal_set_message(t('Failed to create announcment: @name',
             array('@name' => $obj->name)), 'error');
       }
@@ -268,10 +272,11 @@ function node_announce_form_submit($form_id, &$form_state) {
       break;
 
     case "Save":
-      if(node_announce_save($obj)) {
+      if (node_announce_save($obj)) {
         drupal_set_message(t('Successfully saved announcment: @name',
             array('@name' => $obj->name)));
-      } else {
+      }
+      else {
         drupal_set_message(t('Failed to saved announcment: @name',
             array('@name' => $obj->name)), 'error');
       }
@@ -281,19 +286,19 @@ function node_announce_form_submit($form_id, &$form_state) {
     case "Delete":
       $form_state['values']['confirm_delete'] = TRUE;
       $form_state['rebuild'] = TRUE;
-      drupal_set_message("Are you sure you want to delete this announcement?");
+      drupal_set_message(t("Are you sure you want to delete this announcement?"));
       break;
 
     case "Really Delete?":
       $ann = node_announce_load($obj->id);
       node_announce_delete($ann->id);
       $form_state['redirect'] = 'admin/config/system/node_announce/list';
-      drupal_set_message("Deleted $ann->name");
+      drupal_set_message(t("Deleted @name", array('@name' =>  $ann->name)));
       break;
 
     case "Cancel":
       $form_state['redirect'] = 'admin/config/system/node_announce/list';
-      drupal_set_message("Delete cancelled");
+      drupal_set_message(t("Delete cancelled"));
       break;
 
   }
