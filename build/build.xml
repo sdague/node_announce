@@ -41,10 +41,12 @@ installed as follows:
     pear channel-discover pear.phpmd.org
     pear channel-discover pear.phpunit.de
     pear channel-discover components.ez.no
-    pear channel-discover pear.symfony-project.com
+    pear channel-discover pear.symfony.com
+    pear channel-discover pear.netpirates.net
 
     pear install phing/phing
     pear install  -a phpmd/PHP_PMD
+    pear install phpunit/PHP_Timer
     pear install phpunit/phpcpd
     pear install phpunit/phploc
     pear install PHPDocumentor
@@ -743,7 +745,11 @@ Execution of this target can be skipped by setting the
         <echo msg="You must set the drupal.uri property to get simpletests working." />
       </else>
     </if>
-    
+<<<<<<< HEAD
+
+=======
+
+>>>>>>> 6c60d4257881f6b202dda5b449430ff72358c6ae
   </target>
 
 <!-- ### Generate documentation -->
@@ -843,7 +849,10 @@ root directory. -->
                          file="${project.basedir}/../"/>
           </then>
         </if>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6c60d4257881f6b202dda5b449430ff72358c6ae
         <!-- By default use default properties file
              `build.default.properties` -->
         <property name="project.properties.file"
@@ -890,6 +899,12 @@ called from `init` target. -->
       <else>
         <property name="project.drupal.dir"
                 value="${project.basedir}" />
+<<<<<<< HEAD
+=======
+        <echo>
+          Project Base Dir (no make dir): ${project.basedir}
+        </echo>
+>>>>>>> 6c60d4257881f6b202dda5b449430ff72358c6ae
       </else>
     </if>
 
